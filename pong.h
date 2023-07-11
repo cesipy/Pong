@@ -3,8 +3,8 @@
 
 #include <SDL.h>
 
-#define WIDTH 640
-#define HEIGHT 480
+#define WIDTH 1000
+#define HEIGHT 1000
 
 
 typedef struct {
@@ -21,6 +21,9 @@ typedef struct {
     // moving vector
     int vector_x;
     int vector_y;
+
+    // texture
+    SDL_Texture* texture;
 } Ball;
 
 typedef struct {

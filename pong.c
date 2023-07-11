@@ -12,10 +12,12 @@
 App app;
 Ball ball;
 Bat bat[2];          // two bats for player and ai opponent
+SDL_Event event;
 
 // definitions of functions
 void init_SDL();
 void draw_game();
+int check_input(int);
 void move_bat(int up_or_down);
 void move_bat_opponent();
 
@@ -30,42 +32,8 @@ int main(int argc, char* argv[]) {
     SDL_Event event;
     while (shutdown_flag != 1) 
     {
-
-        //check for esc for quiting
-        while ( SDL_PollEvent(&event) != 0)
-        {
-            // check if wanted to quit
-            if (event.type == SDL_QUIT)
-            {
-                shutdown_flag = 1;
-            }
-
-            //check the input
-            else if (event.type == SDL_KEYDOWN)
-            {
-                switch (event.key.keysym.sym)
-                {
-                case SDLK_w:
-                    // w is pressed
-                    move_bat(1);
-                    break;
-                
-                case SDLK_s:
-                    // s is pressed
-                    move_bat(0);
-                    break;
-
-                case SDLK_ESCAPE:
-                    // esc is pressed
-                    shutdown_flag = 1;
-                    break;
-                
-                default:
-                    break;
-                }
-
-            }
-        }
+        shutdown_flag = check_input(shutdown_flag);
+        
     }
 
     SDL_DestroyRenderer(app.renderer);
@@ -132,6 +100,49 @@ void move_bat(int up)
     {
         // testing 
         printf("received s\n");
-    }
-    
+    }   
 }
+
+int check_input(int shutdown_flag) 
+{
+
+//check for esc for quiting
+        while ( SDL_PollEvent(&event) != 0)
+        {
+            // check if wanted to quit
+            if (event.type == SDL_QUIT)
+            {
+                shutdown_flag = 1;
+            }
+
+            //check the input
+            else if (event.type == SDL_KEYDOWN)
+            {
+                switch (event.key.keysym.sym)
+                {
+                case SDLK_w:
+                    // w is pressed
+                    move_bat(1);
+                    break;
+                
+                case SDLK_s:
+                    // s is pressed
+                    move_bat(0);
+                    break;
+
+                case SDLK_ESCAPE:
+                    // esc is pressed
+                    shutdown_flag = 1;
+                    break;
+                
+                default:
+                    break;
+                }
+
+            }
+        }
+        return shutdown_flag;
+}
+
+
+
