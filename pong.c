@@ -6,20 +6,12 @@
 #include <SDL.h>
 #include <stdio.h>
 #include <stdlib.h>
-
-# define WIDTH 640
-# define HEIGHT 480
-
-
-// structs for the game
-typedef struct {
-    SDL_Renderer* renderer;
-    SDL_Window* window;
-} App;
-
+#include "pong.h"
 
 // global vars, so all functions can read
 App app;
+Ball ball;
+Bat bat[2];          // two bats for player and ai opponent
 
 // definitions of functions
 void init_SDL();
@@ -54,12 +46,13 @@ int main(int argc, char* argv[]) {
                 switch (event.key.keysym.sym)
                 {
                 case SDLK_w:
-                    // w is pressed!
-                    // handle W
+                    // w is pressed
+                    move_bat(1);
                     break;
                 
                 case SDLK_s:
                     // s is pressed
+                    move_bat(0);
                     break;
 
                 case SDLK_ESCAPE:
@@ -84,15 +77,19 @@ int main(int argc, char* argv[]) {
 
 /*------------------------------------------------------------------------------*/
 
-
+/**
+ * initialized SDL player. Window and renderer in app are defined.
+*/
 void init_SDL(void) 
 {
     int status_init = SDL_Init(SDL_INIT_VIDEO);
     if (status_init < 0 ) 
+
     {
         fprintf(stderr, "Error occurred @ init SDL :%s\n", SDL_GetError());
         exit(EXIT_FAILURE);
     }
+
     int window_flags = 0;
     int renderer_flags = 0;
 
@@ -106,34 +103,35 @@ void init_SDL(void)
     }
 
 
-    app.renderer = SDL_CreateRenderer(app.renderer, -1, renderer_flags);
+    app.renderer = SDL_CreateRenderer(app.window, -1, renderer_flags);
 
     if (app.renderer == NULL) 
     {
         fprintf(stderr, "Error @ rendererCreation\n");
         exit(1);
     }
-
 }
 
-void move_bat(int up) 
 /**
  * moves th bat eather up or down
  * up = 1 -> move bat up
  * up = 0 -> move bat down
 */
+void move_bat(int up) 
 {
 
     if (up) 
     // handle move bat up
     {
-        
+        // testing functionality so far:
+        printf("received w\n");
     }
 
     if (up == 0) 
     // handle move bat down
     {
-
+        // testing 
+        printf("received s\n");
     }
     
 }

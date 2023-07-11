@@ -6,6 +6,4 @@
  - [ ] function for moving the ball & turn around if edge
  - [ ] move my bat
  - [ ] ai for the bat of opponent
- - [ ]
- - [ ]
- - [ ] free everything and clean up
+ - [ ] free everything and clean up maybe in own function
