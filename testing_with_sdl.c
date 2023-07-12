@@ -37,7 +37,7 @@ int main(int argc, char* argv[]) {
 
 
     // temporary implementation of ball
-    ball.position_x = WIDTH / 2;
+    ball.position_x = WIDTH  / 2;
     ball.position_y = HEIGHT / 2;
 
     ball.height = 1;
@@ -102,6 +102,7 @@ void init_SDL(void)
     }
 }
 
+
 void move_bat(int up) 
 {
     if (up) 
@@ -146,6 +147,8 @@ int check_input(int shutdown_flag)
     }
     return shutdown_flag;
 }
+
+
 
 SDL_Texture* load_texture(char* path) 
 {

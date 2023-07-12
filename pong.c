@@ -14,19 +14,7 @@ Ball ball;
 Bat bat[2];          // two bats for player and ai opponent
 SDL_Event event;
 
-// definitions of functions
-void init_SDL();
-void draw_game();
-
-void prepare_scene(void);
-void present_scene(void);
-SDL_Texture* load_texture(char* path);
-void render_texture(SDL_Texture* texture, int x, int y);
-int check_input(int);
-
-void move_bat(int up_or_down);
-void move_bat_opponent();
-
+/*------------------------------------------------------------------------------*/
 
 int main(int argc, char* argv[]) {
     // initialize the game
@@ -74,6 +62,17 @@ int main(int argc, char* argv[]) {
 /*------------------------------------------------------------------------------*/
 
 /**
+ * initializes bat and player, as well SDL
+ */
+void init(void)
+{
+    init_SDL();
+
+
+}
+
+
+/**
  * initialized SDL player. Window and renderer in app are defined.
 */
 void init_SDL(void) 
@@ -81,7 +80,7 @@ void init_SDL(void)
     int status_init = SDL_Init(SDL_INIT_VIDEO);
     if (status_init < 0 ) 
     {
-        fprintf(stderr, "Error occurred @ init SDL: %s\n", SDL_GetError());
+        fprintf(stderr, "Error occurred @ init SDL: %d\n", SDL_GetError());
         exit(EXIT_FAILURE);
     }
 
@@ -107,7 +106,7 @@ void init_SDL(void)
 }
 
 /**
- * moves th bat eather up or down
+ * moves th bat ether up or down
  * up = 1 -> move bat up
  * up = 0 -> move bat down
 */
@@ -124,10 +123,16 @@ void move_bat(int up)
     }   
 }
 
+
+/**
+ * check keyboard for keys needed to control the game
+ * - w   -> move the bat up
+ * - s   -> move the bat down
+ * - esc -> exit the game
+*/
 int check_input(int shutdown_flag) 
 {
-
-//check for esc for quiting
+        //check for esc for quiting
         while ( SDL_PollEvent(&event) != 0)
         {
             // check if wanted to quit
@@ -164,12 +169,20 @@ int check_input(int shutdown_flag)
         return shutdown_flag;
 }
 
+
+/**
+ * clear current render and prepare with color
+ * color can be set using RGB (0-255)
+*/
 void prepare_scene(void)
 {
-	SDL_SetRenderDrawColor(app.renderer, 96, 128, 255, 255);
+	SDL_SetRenderDrawColor(app.renderer, 255, 255, 255, 1);
 	SDL_RenderClear(app.renderer);
 }
 
+/**
+ * update screen with present render
+*/
 void present_scene(void)
 {
 	SDL_RenderPresent(app.renderer);
