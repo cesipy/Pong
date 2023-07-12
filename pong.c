@@ -189,6 +189,10 @@ void present_scene(void)
 }
 
 
+/**
+ *  load the texture for the ball and the bat
+ *
+ */
 SDL_Texture* load_texture(char* path) 
 {
     SDL_Texture* texture = NULL;
