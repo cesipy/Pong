@@ -217,6 +217,10 @@ SDL_Texture* load_texture(char* path)
     return texture;
 }
 
+
+/**
+ *
+ */
 void render_texture(SDL_Texture* texture, int x, int y)
 {
     SDL_Rect dest_rect;
