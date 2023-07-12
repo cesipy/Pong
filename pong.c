@@ -17,7 +17,13 @@ SDL_Event event;
 // definitions of functions
 void init_SDL();
 void draw_game();
+
+void prepare_scene(void);
+void present_scene(void);
+SDL_Texture* load_texture(char* path);
+void render_texture(SDL_Texture* texture, int x, int y);
 int check_input(int);
+
 void move_bat(int up_or_down);
 void move_bat_opponent();
 
@@ -29,13 +35,35 @@ int main(int argc, char* argv[]) {
     int shutdown_flag = 0;
     int game_status = 0;
 
-    SDL_Event event;
+
+    // temporary implementation of ball
+    ball.position_x = WIDTH  / 2;
+    ball.position_y = HEIGHT / 2;
+
+    ball.height = 1;
+    ball.width = 1;
+
+    ball.vector_x = 1;
+    ball.vector_y = 1;
+
+    ball.texture = load_texture("graphics/ball.bmp");
+
     while (shutdown_flag != 1) 
     {
+        prepare_scene();
+
         shutdown_flag = check_input(shutdown_flag);
+
+        render_texture(ball.texture, ball.position_x, ball.position_y);
+
+
+        present_scene();
+
+        SDL_Delay(16);
         
     }
 
+    SDL_DestroyTexture(ball.texture);
     SDL_DestroyRenderer(app.renderer);
     SDL_DestroyWindow(app.window);
     SDL_Quit();
@@ -52,9 +80,8 @@ void init_SDL(void)
 {
     int status_init = SDL_Init(SDL_INIT_VIDEO);
     if (status_init < 0 ) 
-
     {
-        fprintf(stderr, "Error occurred @ init SDL :%s\n", SDL_GetError());
+        fprintf(stderr, "Error occurred @ init SDL: %s\n", SDL_GetError());
         exit(EXIT_FAILURE);
     }
 
@@ -67,16 +94,15 @@ void init_SDL(void)
     if (app.window == NULL) 
     {
         fprintf(stderr, "Error @ createWindow!\n");
-        exit(1);
+        exit(EXIT_FAILURE);
     }
-
 
     app.renderer = SDL_CreateRenderer(app.window, -1, renderer_flags);
 
     if (app.renderer == NULL) 
     {
         fprintf(stderr, "Error @ rendererCreation\n");
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 }
 
@@ -87,19 +113,14 @@ void init_SDL(void)
 */
 void move_bat(int up) 
 {
-
     if (up) 
-    // handle move bat up
     {
-        // testing functionality so far:
-        printf("received w\n");
+        printf("Received w\n"); // Handle moving the bat up
     }
 
     if (up == 0) 
-    // handle move bat down
     {
-        // testing 
-        printf("received s\n");
+        printf("Received s\n"); // Handle moving the bat down
     }   
 }
 
@@ -138,11 +159,55 @@ int check_input(int shutdown_flag)
                 default:
                     break;
                 }
-
             }
         }
         return shutdown_flag;
 }
 
+void prepare_scene(void)
+{
+	SDL_SetRenderDrawColor(app.renderer, 96, 128, 255, 255);
+	SDL_RenderClear(app.renderer);
+}
+
+void present_scene(void)
+{
+	SDL_RenderPresent(app.renderer);
+}
 
 
+SDL_Texture* load_texture(char* path) 
+{
+    SDL_Texture* texture = NULL;
+
+    SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_INFO, "Loading %s", path);
+
+    SDL_Surface* surface = SDL_LoadBMP(path);
+    if (surface == NULL) 
+    {
+        fprintf(stderr, "Unable to load image %s: %s\n", path, SDL_GetError());
+        return NULL;
+    }
+
+    texture = SDL_CreateTextureFromSurface(app.renderer, surface);
+    SDL_FreeSurface(surface);
+
+    if (texture == NULL) 
+    {
+        fprintf(stderr, "Unable to create texture from surface: %s\n", SDL_GetError());
+    }
+
+    return texture;
+}
+
+void render_texture(SDL_Texture* texture, int x, int y)
+{
+    SDL_Rect dest_rect;
+
+    dest_rect.x = x;
+    dest_rect.y = y;
+
+    SDL_QueryTexture(texture, NULL, NULL, &dest_rect.w, &dest_rect.h);
+
+    SDL_RenderCopy(app.renderer, texture, NULL, &dest_rect);
+}
