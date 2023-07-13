@@ -43,9 +43,14 @@ int main(int argc, char* argv[]) {
 
         // draw my bat
         render_texture(bat[0].texture, bat[0].position_x, bat[0].position_y, bat[0].width, bat[0].height);
+
+        // draw opponent bat
+        render_texture(bat[1].texture, bat[1].position_x, bat[1].position_y, bat[1].width, bat[1].height);
         
         // draw for this iteration
         present_scene();
+
+
 
         // update ball by its vector
         move_ball();
@@ -82,8 +87,8 @@ void init(void)
     ball.height = 25;
     ball.width = 25;
 
-    ball.vector_x = 0;
-    ball.vector_y = 1;
+    ball.vector_x = 1;
+    ball.vector_y = 0;
 
     ball.texture = load_texture("graphics/ball.bmp");
 
@@ -95,6 +100,15 @@ void init(void)
     bat[0].width= 15;
 
     bat->texture = load_texture("graphics/bat.bmp");
+
+
+    // initialize opponent bat
+    bat[1].position_x = 5;
+    bat[1].position_y = HEIGHT / 2 - 50;
+    bat[1].height = 100;
+    bat[1].width = 15;
+
+    bat[1].texture = load_texture("graphics/bat.bmp");
 
 }
 
