@@ -24,18 +24,6 @@ int main(int argc, char* argv[]) {
     int game_status = 0;
 
 
-    // temporary implementation of ball
-    ball.position_x = WIDTH  / 2;
-    ball.position_y = HEIGHT / 2;
-
-    ball.height = 1;
-    ball.width = 1;
-
-    ball.vector_x = 1;
-    ball.vector_y = 1;
-
-    ball.texture = load_texture("graphics/ball.bmp");
-
     while (shutdown_flag != 1) 
     {
         prepare_scene();
@@ -66,8 +54,26 @@ int main(int argc, char* argv[]) {
  */
 void init(void)
 {
+    // initialize the game
     init_SDL();
 
+    // implementation of ball
+    ball.position_x = WIDTH  / 2;
+    ball.position_y = HEIGHT / 2;
+
+    ball.height = 1;
+    ball.width = 1;
+
+    ball.vector_x = 1;
+    ball.vector_y = 1;
+
+    ball.texture = load_texture("graphics/ball.bmp");
+
+    // initialize bat
+    bat[0].position_x = WIDTH - 20;
+    bat[0].position_y = HEIGHT / 2;
+    bat[0].height = 50;
+    bat[0].width= 10;
 
 }
 
@@ -80,7 +86,7 @@ void init_SDL(void)
     int status_init = SDL_Init(SDL_INIT_VIDEO);
     if (status_init < 0 ) 
     {
-        fprintf(stderr, "Error occurred @ init SDL: %d\n", SDL_GetError());
+        fprintf(stderr, "Error occurred @ init SDL: %s\n", SDL_GetError());
         exit(EXIT_FAILURE);
     }
 
