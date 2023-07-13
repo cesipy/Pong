@@ -1,6 +1,7 @@
 /**
  * instant todo:
  *  - improve error handling
+ *  - 0
 */
 
 #include <SDL.h>
@@ -8,15 +9,21 @@
 #include <stdlib.h>
 #include "pong.h"
 
+#define SENSITIVITY 30  // sensitivity of bat
+
+
 // global vars, so all functions can read
 App app;
 Ball ball;
 Bat bat[2];          // two bats for player and ai opponent
 SDL_Event event;
 
+
 /*------------------------------------------------------------------------------*/
 
+
 int main(int argc, char* argv[]) {
+    
     // initialize the game
     init();
 
@@ -36,14 +43,19 @@ int main(int argc, char* argv[]) {
 
         // draw my bat
         render_texture(bat[0].texture, bat[0].position_x, bat[0].position_y, bat[0].width, bat[0].height);
-
-
+        
+        // draw for this iteration
         present_scene();
+
+        // update ball by its vector
+        move_ball();
 
         SDL_Delay(16);
         
     }
 
+
+    // clean up
     SDL_DestroyTexture(ball.texture);
     SDL_DestroyRenderer(app.renderer);
     SDL_DestroyWindow(app.window);
@@ -54,8 +66,9 @@ int main(int argc, char* argv[]) {
 
 /*------------------------------------------------------------------------------*/
 
+
 /**
- * initializes bat and player, as well SDL
+ * initializes bats and player, as well SDL
  */
 void init(void)
 {
@@ -69,7 +82,7 @@ void init(void)
     ball.height = 25;
     ball.width = 25;
 
-    ball.vector_x = 1;
+    ball.vector_x = 0;
     ball.vector_y = 1;
 
     ball.texture = load_texture("graphics/ball.bmp");
@@ -119,6 +132,17 @@ void init_SDL(void)
     }
 }
 
+
+/**
+ * move the ball in the direction of the vector
+*/
+void move_ball(void) 
+{
+    ball.position_x += ball.vector_x;
+    ball.position_y += ball.vector_y;
+}
+
+
 /**
  * moves th bat ether up or down
  * up = 1 -> move bat up
@@ -129,11 +153,13 @@ void move_bat(int up)
     if (up) 
     {
         printf("Received w\n"); // Handle moving the bat up
+        bat[0].position_y -= SENSITIVITY;
     }
 
     if (up == 0) 
     {
         printf("Received s\n"); // Handle moving the bat down
+        bat[0].position_y += SENSITIVITY;
     }   
 }
 
@@ -194,6 +220,7 @@ void prepare_scene(void)
 	SDL_RenderClear(app.renderer);
 }
 
+
 /**
  * update screen with present render
 */
@@ -233,7 +260,8 @@ SDL_Texture* load_texture(char* path)
 
 
 /**
- *
+ * render the structure of ball / bat. 
+ * takes all the coordinates and draws the object for the given frame based on its attributes
  */
 void render_texture(SDL_Texture* texture, int x, int y, int width, int height)
 {

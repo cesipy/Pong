@@ -1,6 +1,7 @@
 /**
  * instant todo:
  *  - improve error handling
+ *  - 0
 */
 
 #include <SDL.h>
@@ -8,45 +9,27 @@
 #include <stdlib.h>
 #include "pong.h"
 
+#define SENSITIVITY 30  // sensitivity of bat
+
+
 // global vars, so all functions can read
 App app;
 Ball ball;
-Bat bat[2];          // two bats for player and AI opponent
+Bat bat[2];          // two bats for player and ai opponent
 SDL_Event event;
 
-// definitions of functions
-void init_SDL();
-void draw_game();
 
-void prepare_scene(void);
-void present_scene(void);
-SDL_Texture* load_texture(char* path);
-void render_texture(SDL_Texture* texture, int x, int y);
-int check_input(int);
-
-void move_bat(int up_or_down);
-void move_bat_opponent();
+/*------------------------------------------------------------------------------*/
 
 
 int main(int argc, char* argv[]) {
+    
     // initialize the game
-    init_SDL();
+    init();
 
     int shutdown_flag = 0;
     int game_status = 0;
 
-
-    // temporary implementation of ball
-    ball.position_x = WIDTH  / 2;
-    ball.position_y = HEIGHT / 2;
-
-    ball.height = 1;
-    ball.width = 1;
-
-    ball.vector_x = 1;
-    ball.vector_y = 1;
-
-    ball.texture = load_texture("graphics/ball.bmp");
 
     while (shutdown_flag != 1) 
     {
@@ -54,15 +37,25 @@ int main(int argc, char* argv[]) {
 
         shutdown_flag = check_input(shutdown_flag);
 
-        render_texture(ball.texture, ball.position_x, ball.position_y);
+        // draw ball
+        render_texture(ball.texture, ball.position_x, ball.position_y, ball.width, ball.height);
 
 
+        // draw my bat
+        render_texture(bat[0].texture, bat[0].position_x, bat[0].position_y, bat[0].width, bat[0].height);
+        
+        // draw for this iteration
         present_scene();
+
+        // update ball by its vector
+        move_ball();
 
         SDL_Delay(16);
         
     }
 
+
+    // clean up
     SDL_DestroyTexture(ball.texture);
     SDL_DestroyRenderer(app.renderer);
     SDL_DestroyWindow(app.window);
@@ -70,8 +63,45 @@ int main(int argc, char* argv[]) {
     return 0;
 }
 
+
 /*------------------------------------------------------------------------------*/
 
+
+/**
+ * initializes bats and player, as well SDL
+ */
+void init(void)
+{
+    // initialize the game
+    init_SDL();
+
+    // implementation of ball
+    ball.position_x = WIDTH  / 2;
+    ball.position_y = HEIGHT / 2;
+
+    ball.height = 25;
+    ball.width = 25;
+
+    ball.vector_x = 0;
+    ball.vector_y = 1;
+
+    ball.texture = load_texture("graphics/ball.bmp");
+
+
+    // initialize bat
+    bat[0].position_x = WIDTH - 20;
+    bat[0].position_y = HEIGHT / 2 -50;
+    bat[0].height = 100;
+    bat[0].width= 15;
+
+    bat->texture = load_texture("graphics/bat.bmp");
+
+}
+
+
+/**
+ * initialized SDL player. Window and renderer in app are defined.
+*/
 void init_SDL(void) 
 {
     int status_init = SDL_Init(SDL_INIT_VIDEO);
@@ -103,53 +133,107 @@ void init_SDL(void)
 }
 
 
+/**
+ * move the ball in the direction of the vector
+*/
+void move_ball(void) 
+{
+    ball.position_x += ball.vector_x;
+    ball.position_y += ball.vector_y;
+}
+
+
+/**
+ * moves th bat ether up or down
+ * up = 1 -> move bat up
+ * up = 0 -> move bat down
+*/
 void move_bat(int up) 
 {
     if (up) 
     {
         printf("Received w\n"); // Handle moving the bat up
+        bat[0].position_y -= SENSITIVITY;
     }
 
     if (up == 0) 
     {
         printf("Received s\n"); // Handle moving the bat down
+        bat[0].position_y += SENSITIVITY;
     }   
 }
 
+
+/**
+ * check keyboard for keys needed to control the game
+ * - w   -> move the bat up
+ * - s   -> move the bat down
+ * - esc -> exit the game
+*/
 int check_input(int shutdown_flag) 
 {
-    while (SDL_PollEvent(&event) != 0)
-    {
-        if (event.type == SDL_QUIT)
+        //check for esc for quiting
+        while ( SDL_PollEvent(&event) != 0)
         {
-            shutdown_flag = 1;
-        }
-        else if (event.type == SDL_KEYDOWN)
-        {
-            switch (event.key.keysym.sym)
+            // check if wanted to quit
+            if (event.type == SDL_QUIT)
             {
+                shutdown_flag = 1;
+            }
+
+            //check the input
+            else if (event.type == SDL_KEYDOWN)
+            {
+                switch (event.key.keysym.sym)
+                {
                 case SDLK_w:
+                    // w is pressed
                     move_bat(1);
                     break;
                 
                 case SDLK_s:
+                    // s is pressed
                     move_bat(0);
                     break;
 
                 case SDLK_ESCAPE:
+                    // esc is pressed
                     shutdown_flag = 1;
                     break;
                 
                 default:
                     break;
+                }
             }
         }
-    }
-    return shutdown_flag;
+        return shutdown_flag;
 }
 
 
+/**
+ * clear current render and prepare with color
+ * color can be set using RGB (0-255)
+*/
+void prepare_scene(void)
+{
+	SDL_SetRenderDrawColor(app.renderer, 100, 0, 255, 255);
+	SDL_RenderClear(app.renderer);
+}
 
+
+/**
+ * update screen with present render
+*/
+void present_scene(void)
+{
+	SDL_RenderPresent(app.renderer);
+}
+
+
+/**
+ *  load the texture for the ball and the bat
+ *
+ */
 SDL_Texture* load_texture(char* path) 
 {
     SDL_Texture* texture = NULL;
@@ -174,25 +258,21 @@ SDL_Texture* load_texture(char* path)
     return texture;
 }
 
-void render_texture(SDL_Texture* texture, int x, int y)
+
+/**
+ * render the structure of ball / bat. 
+ * takes all the coordinates and draws the object for the given frame based on its attributes
+ */
+void render_texture(SDL_Texture* texture, int x, int y, int width, int height)
 {
     SDL_Rect dest_rect;
 
     dest_rect.x = x;
     dest_rect.y = y;
+    dest_rect.w = width;
+    dest_rect.h = height;
 
-    SDL_QueryTexture(texture, NULL, NULL, &dest_rect.w, &dest_rect.h);
+    //SDL_QueryTexture(texture, NULL, NULL, &dest_rect.w, &dest_rect.h);
 
     SDL_RenderCopy(app.renderer, texture, NULL, &dest_rect);
-}
-
-void prepare_scene(void)
-{
-	SDL_SetRenderDrawColor(app.renderer, 96, 128, 255, 255);
-	SDL_RenderClear(app.renderer);
-}
-
-void present_scene(void)
-{
-	SDL_RenderPresent(app.renderer);
 }
