@@ -232,7 +232,7 @@ void collision(int player)
         int ball_center_y = ball.position_y + ball.height / 2;
 
         // compute y value
-        ball.vector_y = (ball_center_y - bat_center_y) / (SENSITIVITY * 2); // can be adjusted, controles velocity
+        ball.vector_y = (ball_center_y - bat_center_y) / (SENSITIVITY); // can be adjusted, controles velocity
     }
 }
 

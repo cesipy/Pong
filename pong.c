@@ -59,7 +59,7 @@ int main(int argc, char* argv[]) {
         SDL_Delay(16);
         
     }
-    printf("Score: %d : %d\n", score[0], score[1]);
+    printf("Score: player - AI\n\t    %d - %d\n", score[0], score[1]);
 
     // clean up
     SDL_DestroyTexture(ball.texture);
@@ -169,17 +169,35 @@ void move_ball(void)
     // reverse ball direction if it hits the edges; only temporary; should reset and adjust score
     if (ball.position_x < 0) 
     { 
-        printf("<0\n");
         score[0]++;
-        ball.vector_x = -ball.vector_x; 
-        ball.vector_y = -ball.vector_y; 
+        ball.position_x = WIDTH  / 2;
+        ball.position_y = HEIGHT / 2;
+        
+        ball.vector_x = -ball.vector_x;
+        ball.vector_y = 0;
+
+        bat[0].position_x = WIDTH - 20;
+        bat[0].position_y = HEIGHT / 2 -50;
+
+        bat[1].position_x = 5;
+        bat[1].position_y = HEIGHT / 2 - 50;
+
     }
     
     if (ball.position_x > WIDTH - ball.width) 
     { 
         score[1]++;
-        ball.vector_x = -ball.vector_x; 
-        ball.vector_y = -ball.vector_y; 
+        ball.position_x = WIDTH  / 2;
+        ball.position_y = HEIGHT / 2;
+        
+        ball.vector_x = -ball.vector_x;
+        ball.vector_y = 0;
+
+        bat[0].position_x = WIDTH - 20;
+        bat[0].position_y = HEIGHT / 2 -50;
+
+        bat[1].position_x = 5;
+        bat[1].position_y = HEIGHT / 2 - 50;
     }
 }
 
@@ -194,13 +212,13 @@ void move_bat(int up)
 {
     if (up) 
     {
-        printf("Received w\n"); // Handle moving the bat up
+        // printf("Received w\n"); // Handle moving the bat up
         bat[0].position_y -= SENSITIVITY;
     }
 
     if (up == 0) 
     {
-        printf("Received s\n"); // Handle moving the bat down
+        // printf("Received s\n"); // Handle moving the bat down
         bat[0].position_y += SENSITIVITY;
     }   
 }
@@ -232,7 +250,7 @@ void collision(int player)
         int ball_center_y = ball.position_y + ball.height / 2;
 
         // compute y value
-        ball.vector_y = (ball_center_y - bat_center_y) / (SENSITIVITY * 2); // can be adjusted, controles velocity
+        ball.vector_y = (ball_center_y - bat_center_y) / (SENSITIVITY); // can be adjusted, controles velocity
     }
 }
 
