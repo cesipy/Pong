@@ -17,6 +17,7 @@ App app;
 Ball ball;
 Bat bat[2];          // two bats for player and ai opponent
 SDL_Event event;
+int score[2];
 
 
 /*------------------------------------------------------------------------------*/
@@ -43,9 +44,14 @@ int main(int argc, char* argv[]) {
 
         // draw my bat
         render_texture(bat[0].texture, bat[0].position_x, bat[0].position_y, bat[0].width, bat[0].height);
+
+        // draw opponent bat
+        render_texture(bat[1].texture, bat[1].position_x, bat[1].position_y, bat[1].width, bat[1].height);
         
         // draw for this iteration
         present_scene();
+
+
 
         // update ball by its vector
         move_ball();
@@ -53,7 +59,7 @@ int main(int argc, char* argv[]) {
         SDL_Delay(16);
         
     }
-
+    printf("Score: %d : %d\n", score[0], score[1]);
 
     // clean up
     SDL_DestroyTexture(ball.texture);
@@ -82,8 +88,8 @@ void init(void)
     ball.height = 25;
     ball.width = 25;
 
-    ball.vector_x = 0;
-    ball.vector_y = 1;
+    ball.vector_x = 2;
+    ball.vector_y = 0;
 
     ball.texture = load_texture("graphics/ball.bmp");
 
@@ -95,6 +101,15 @@ void init(void)
     bat[0].width= 15;
 
     bat->texture = load_texture("graphics/bat.bmp");
+
+
+    // initialize opponent bat
+    bat[1].position_x = 5;
+    bat[1].position_y = HEIGHT / 2 - 50;
+    bat[1].height = 100;
+    bat[1].width = 15;
+
+    bat[1].texture = load_texture("graphics/bat.bmp");
 
 }
 
@@ -140,7 +155,34 @@ void move_ball(void)
 {
     ball.position_x += ball.vector_x;
     ball.position_y += ball.vector_y;
+
+    collision(0);
+    collision(1);
+
+    // reverse ball direction if hits the top or bottom 
+    if (ball.position_y <= 0 || ball.position_y + ball.height >= HEIGHT) 
+    { 
+        ball.vector_y = -ball.vector_y; 
+    }
+
+
+    // reverse ball direction if it hits the edges; only temporary; should reset and adjust score
+    if (ball.position_x < 0) 
+    { 
+        printf("<0\n");
+        score[0]++;
+        ball.vector_x = -ball.vector_x; 
+        ball.vector_y = -ball.vector_y; 
+    }
+    
+    if (ball.position_x > WIDTH - ball.width) 
+    { 
+        score[1]++;
+        ball.vector_x = -ball.vector_x; 
+        ball.vector_y = -ball.vector_y; 
+    }
 }
+
 
 
 /**
@@ -162,6 +204,38 @@ void move_bat(int up)
         bat[0].position_y += SENSITIVITY;
     }   
 }
+
+
+/**
+ * checks if ball collides with bat.
+ * parameter player determines which bat to check.
+ */
+void collision(int player) 
+{
+    int ball_condition1 = ball.position_x + ball.width >= bat[player].position_x;
+    int ball_condition2 = ball.position_x <= bat[player].position_x + bat[player].width;
+    int ball_condition3 = ball.position_y + ball.height >= bat[player].position_y;
+    int ball_condition4 = ball.position_y <= bat[player].position_y + bat[player].height;
+
+
+    if (ball_condition1 && ball_condition2 && ball_condition3 && ball_condition4)
+    {
+        // collision occurred, reverse the ball's x direction
+        ball.vector_x = -ball.vector_x;
+
+        // update ball's y dirction
+
+        // get bat center
+        int bat_center_y = bat[player].position_y + bat[player].height / 2;
+
+        // get ball center
+        int ball_center_y = ball.position_y + ball.height / 2;
+
+        // compute y value
+        ball.vector_y = (ball_center_y - bat_center_y) / (SENSITIVITY * 2); // can be adjusted, controles velocity
+    }
+}
+
 
 
 /**

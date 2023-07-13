@@ -20,6 +20,7 @@ int check_input(int);
 void move_bat(int up_or_down);
 void move_bat_opponent();
 void move_ball();
+void collision(int);
 
 typedef struct {
     SDL_Renderer* renderer;
