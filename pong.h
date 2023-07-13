@@ -9,7 +9,7 @@
 // definitions of functions
 void init_SDL();
 void init();
-void draw_game();
+void ball_bat_reset(int);
 
 void prepare_scene(void);
 void present_scene(void);
@@ -25,6 +25,7 @@ void collision(int);
 typedef struct {
     SDL_Renderer* renderer;
     SDL_Window* window;
+    int game_state;
 } App;
 
 typedef struct {

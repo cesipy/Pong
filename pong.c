@@ -10,6 +10,7 @@
 #include "pong.h"
 
 #define SENSITIVITY 30  // sensitivity of bat
+#define INITIAL_VELOCITY 4 // velocity of ball
 
 
 // global vars, so all functions can read
@@ -29,7 +30,7 @@ int main(int argc, char* argv[]) {
     init();
 
     int shutdown_flag = 0;
-    int game_status = 0;
+    app.game_state = 0;         // create a enum for state and handle them
 
     // Define target frame rate
     const int TARGET_FPS = 60;
@@ -94,22 +95,17 @@ void init(void)
     // initialize the game
     init_SDL();
 
-    // implementation of ball
-    ball.position_x = WIDTH  / 2;
-    ball.position_y = HEIGHT / 2;
+    // initialize ball's and bat' position to default.
+    // initialize ball's direction vector
+    ball_bat_reset(1);
 
     ball.height = 25;
     ball.width = 25;
-
-    ball.vector_x = 2;
-    ball.vector_y = 0;
 
     ball.texture = load_texture("graphics/ball.bmp");
 
 
     // initialize bat
-    bat[0].position_x = WIDTH - 20;
-    bat[0].position_y = HEIGHT / 2 -50;
     bat[0].height = 100;
     bat[0].width= 15;
 
@@ -117,8 +113,6 @@ void init(void)
 
 
     // initialize opponent bat
-    bat[1].position_x = 5;
-    bat[1].position_y = HEIGHT / 2 - 50;
     bat[1].height = 100;
     bat[1].width = 15;
 
@@ -163,6 +157,9 @@ void init_SDL(void)
 
 /**
  * move the ball in the direction of the vector
+ * 
+ * sensitivity of new direction after collision is too high. 
+ * this feature has to be further improved
 */
 void move_ball(void) 
 {
@@ -183,34 +180,14 @@ void move_ball(void)
     if (ball.position_x < 0) 
     { 
         score[0]++;
-        ball.position_x = WIDTH  / 2;
-        ball.position_y = HEIGHT / 2;
-        
-        ball.vector_x = -ball.vector_x;
-        ball.vector_y = 0;
-
-        bat[0].position_x = WIDTH - 20;
-        bat[0].position_y = HEIGHT / 2 -50;
-
-        bat[1].position_x = 5;
-        bat[1].position_y = HEIGHT / 2 - 50;
+        ball_bat_reset(0);
 
     }
     
     if (ball.position_x > WIDTH - ball.width) 
     { 
         score[1]++;
-        ball.position_x = WIDTH  / 2;
-        ball.position_y = HEIGHT / 2;
-        
-        ball.vector_x = -ball.vector_x;
-        ball.vector_y = 0;
-
-        bat[0].position_x = WIDTH - 20;
-        bat[0].position_y = HEIGHT / 2 -50;
-
-        bat[1].position_x = 5;
-        bat[1].position_y = HEIGHT / 2 - 50;
+        ball_bat_reset(0);
     }
 }
 
@@ -234,6 +211,29 @@ void move_bat(int up)
         // printf("Received s\n"); // Handle moving the bat down
         bat[0].position_y += SENSITIVITY;
     }   
+}
+
+
+/**
+ * resets ball and bat to default position.
+ * if flag is set, the ball's direction vector is set.
+ * if flag is not set, the ball's direction vector is reversed.
+*/
+void ball_bat_reset(int first_init_flag)
+{
+    if (first_init_flag) { ball.vector_x = INITIAL_VELOCITY; }
+    else                 { ball.vector_x = -ball.vector_x;  }   
+    
+    ball.vector_y = 0;
+
+    ball.position_x = WIDTH  / 2;
+    ball.position_y = HEIGHT / 2;
+
+    bat[0].position_x = WIDTH - 20;
+    bat[0].position_y = HEIGHT / 2 -50;
+
+    bat[1].position_x = 5;
+    bat[1].position_y = HEIGHT / 2 - 50;
 }
 
 
@@ -263,7 +263,7 @@ void collision(int player)
         int ball_center_y = ball.position_y + ball.height / 2;
 
         // compute y value
-        ball.vector_y = (ball_center_y - bat_center_y) / (SENSITIVITY/3); // can be adjusted, controles velocity
+        ball.vector_y = (ball_center_y - bat_center_y) / 5; // can be adjusted, controles velocity
     }
 }
 
