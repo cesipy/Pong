@@ -31,9 +31,16 @@ int main(int argc, char* argv[]) {
     int shutdown_flag = 0;
     int game_status = 0;
 
+    // Define target frame rate
+    const int TARGET_FPS = 60;
+
+    // Calculate the time per frame based on the target frame rate
+    const Uint32 targetFrameTime = 1000 / TARGET_FPS;  // in milliseconds
 
     while (shutdown_flag != 1) 
     {
+        Uint32 frameStartTime = SDL_GetTicks();
+
         prepare_scene();
 
         shutdown_flag = check_input(shutdown_flag);
@@ -56,8 +63,14 @@ int main(int argc, char* argv[]) {
         // update ball by its vector
         move_ball();
 
-        SDL_Delay(16);
-        
+        Uint32 frameEndTime = SDL_GetTicks();
+        Uint32 frameTime = frameEndTime - frameStartTime;
+
+        // If the frame was rendered faster than the target frame time, introduce a delay
+        if (frameTime < targetFrameTime) {
+            Uint32 delayTime = targetFrameTime - frameTime;
+            SDL_Delay(delayTime);
+        }
     }
     printf("Score: player - AI\n\t    %d - %d\n", score[0], score[1]);
 
@@ -250,7 +263,7 @@ void collision(int player)
         int ball_center_y = ball.position_y + ball.height / 2;
 
         // compute y value
-        ball.vector_y = (ball_center_y - bat_center_y) / (SENSITIVITY); // can be adjusted, controles velocity
+        ball.vector_y = (ball_center_y - bat_center_y) / (SENSITIVITY/3); // can be adjusted, controles velocity
     }
 }
 
