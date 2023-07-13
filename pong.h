@@ -14,7 +14,7 @@ void draw_game();
 void prepare_scene(void);
 void present_scene(void);
 SDL_Texture* load_texture(char* path);
-void render_texture(SDL_Texture* texture, int x, int y);
+void render_texture(SDL_Texture* texture, int x, int y, int w, int h);
 int check_input(int);
 
 void move_bat(int up_or_down);
@@ -44,6 +44,9 @@ typedef struct {
     int position_y;
     int height;
     int width;
+
+    // texture
+    SDL_Texture* texture;
 } Bat;
 
 

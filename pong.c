@@ -18,7 +18,7 @@ SDL_Event event;
 
 int main(int argc, char* argv[]) {
     // initialize the game
-    init_SDL();
+    init();
 
     int shutdown_flag = 0;
     int game_status = 0;
@@ -30,7 +30,12 @@ int main(int argc, char* argv[]) {
 
         shutdown_flag = check_input(shutdown_flag);
 
-        render_texture(ball.texture, ball.position_x, ball.position_y);
+        // draw ball
+        render_texture(ball.texture, ball.position_x, ball.position_y, ball.width, ball.height);
+
+
+        // draw my bat
+        render_texture(bat[0].texture, bat[0].position_x, bat[0].position_y, bat[0].width, bat[0].height);
 
 
         present_scene();
@@ -61,19 +66,22 @@ void init(void)
     ball.position_x = WIDTH  / 2;
     ball.position_y = HEIGHT / 2;
 
-    ball.height = 1;
-    ball.width = 1;
+    ball.height = 25;
+    ball.width = 25;
 
     ball.vector_x = 1;
     ball.vector_y = 1;
 
     ball.texture = load_texture("graphics/ball.bmp");
 
+
     // initialize bat
     bat[0].position_x = WIDTH - 20;
-    bat[0].position_y = HEIGHT / 2;
-    bat[0].height = 50;
-    bat[0].width= 10;
+    bat[0].position_y = HEIGHT / 2 -50;
+    bat[0].height = 100;
+    bat[0].width= 15;
+
+    bat->texture = load_texture("graphics/bat.bmp");
 
 }
 
@@ -182,7 +190,7 @@ int check_input(int shutdown_flag)
 */
 void prepare_scene(void)
 {
-	SDL_SetRenderDrawColor(app.renderer, 255, 255, 255, 1);
+	SDL_SetRenderDrawColor(app.renderer, 100, 0, 255, 255);
 	SDL_RenderClear(app.renderer);
 }
 
@@ -227,14 +235,16 @@ SDL_Texture* load_texture(char* path)
 /**
  *
  */
-void render_texture(SDL_Texture* texture, int x, int y)
+void render_texture(SDL_Texture* texture, int x, int y, int width, int height)
 {
     SDL_Rect dest_rect;
 
     dest_rect.x = x;
     dest_rect.y = y;
+    dest_rect.w = width;
+    dest_rect.h = height;
 
-    SDL_QueryTexture(texture, NULL, NULL, &dest_rect.w, &dest_rect.h);
+    //SDL_QueryTexture(texture, NULL, NULL, &dest_rect.w, &dest_rect.h);
 
     SDL_RenderCopy(app.renderer, texture, NULL, &dest_rect);
 }
