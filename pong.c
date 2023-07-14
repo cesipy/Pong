@@ -10,7 +10,7 @@
 #include "pong.h"
 
 #define SENSITIVITY 30  // sensitivity of bat
-#define INITIAL_VELOCITY 4 // velocity of ball
+#define INITIAL_VELOCITY 1 // velocity of ball
 
 
 // global vars, so all functions can read
@@ -229,8 +229,8 @@ void ball_bat_reset(int first_init_flag)
     ball.position_x = WIDTH  / 2;
     ball.position_y = HEIGHT / 2;
 
-    bat[0].position_x = WIDTH - 20;
-    bat[0].position_y = HEIGHT / 2 -50;
+    bat[0].position_x = WIDTH - 30;
+    bat[0].position_y = HEIGHT / 2 - 50;
 
     bat[1].position_x = 5;
     bat[1].position_y = HEIGHT / 2 - 50;
@@ -374,10 +374,11 @@ void render_texture(SDL_Texture* texture, int x, int y, int width, int height)
 
     dest_rect.x = x;
     dest_rect.y = y;
-    dest_rect.w = width;
-    dest_rect.h = height;
+    //dest_rect.w = width;
+    //dest_rect.h = height;
 
-    //SDL_QueryTexture(texture, NULL, NULL, &dest_rect.w, &dest_rect.h);
+    // use this to fetch size of .bmps
+    SDL_QueryTexture(texture, NULL, NULL, &dest_rect.w, &dest_rect.h);
 
     SDL_RenderCopy(app.renderer, texture, NULL, &dest_rect);
 }
