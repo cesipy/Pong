@@ -9,8 +9,9 @@
 #include <stdlib.h>
 #include "pong.h"
 
-#define SENSITIVITY 30  // sensitivity of bat
-#define INITIAL_VELOCITY 1 // velocity of ball
+#define SENSITIVITY 30          // sensitivity of bat
+#define INITIAL_VELOCITY 3      // velocity of ball
+#define AI_STRENGTH 5          // edit capabilities of ai.
 
 
 // global vars, so all functions can read
@@ -45,6 +46,11 @@ int main(int argc, char* argv[]) {
         prepare_scene();
 
         shutdown_flag = check_input(shutdown_flag);
+
+        //printf("ball_y %d, vector x %d, vector y %d\n", ball.position_y, ball.vector_x, ball.vector_y);
+
+        // move AI's bat
+        move_bat_opponent();
 
         // draw ball
         render_texture(ball.texture, ball.position_x, ball.position_y, ball.width, ball.height);
@@ -215,6 +221,49 @@ void move_bat(int up)
 
 
 /**
+ * ai moves the opponent's bat.
+ */
+void move_bat_opponent(void)
+{
+    int middle = HEIGHT / 2 - 50;
+
+    // if ball moves towards player (not ai)
+    if (ball.vector_x > 0)
+    {
+        if (bat[1].position_y < middle)
+        {
+            bat[1].position_y += AI_STRENGTH;
+        }
+        else if (bat[1].position_y > middle)
+        {
+            bat[1].position_y -= AI_STRENGTH;
+        }
+    }
+    // ball moves towards ai's bat
+    else if (ball.vector_x < 0)
+    {
+        // calculate the predicted intersection point of the ball and the AI's bat
+        int predicted_intersection = ball.position_y + (bat[1].position_x - ball.position_x) * ball.vector_y / ball.vector_x;
+        int current_bat_position   = bat[1].position_y + bat[1].height / 2;
+
+        if (predicted_intersection > current_bat_position && predicted_intersection < current_bat_position + 30)
+        {
+
+        }
+        
+        else if (predicted_intersection < current_bat_position)
+        {
+            bat[1].position_y -= AI_STRENGTH;
+        }
+        else if (predicted_intersection > current_bat_position)
+        {
+            bat[1].position_y += AI_STRENGTH;
+        }
+    }
+}
+
+
+/**
  * resets ball and bat to default position.
  * if flag is set, the ball's direction vector is set.
  * if flag is not set, the ball's direction vector is reversed.
@@ -263,14 +312,15 @@ void collision(int player)
         int ball_center_y = ball.position_y + ball.height / 2;
 
         // compute y value
-        ball.vector_y = (ball_center_y - bat_center_y) / 5; // can be adjusted, controles velocity
+        ball.vector_y = (ball_center_y - bat_center_y) / 8; // can be adjusted, controles velocity
     }
 }
 
 
 
 /**
- * check keyboard for keys needed to control the game
+ * check keyboard for keys needed to control the game.
+ * if control keys (w / s) are typed, call move_bat function
  * - w   -> move the bat up
  * - s   -> move the bat down
  * - esc -> exit the game
