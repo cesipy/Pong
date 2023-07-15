@@ -206,14 +206,17 @@ void move_ball(void)
 */
 void move_bat(int up) 
 {
-    if (up) 
+    int current_bat_position = bat[0].position_y + bat[0].height / 2;
+    if (up && current_bat_position < HEIGHT) 
     {
+        printf("reache\n");
         // printf("Received w\n"); // Handle moving the bat up
         bat[0].position_y -= SENSITIVITY;
     }
 
-    if (up == 0) 
+    if (up == 0 && current_bat_position > 0) 
     {
+
         // printf("Received s\n"); // Handle moving the bat down
         bat[0].position_y += SENSITIVITY;
     }   
