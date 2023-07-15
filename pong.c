@@ -11,7 +11,7 @@
 
 #define SENSITIVITY 30          // sensitivity of bat
 #define INITIAL_VELOCITY 3      // velocity of ball
-#define AI_STRENGTH 5          // edit capabilities of ai.
+#define AI_STRENGTH 10        // edit capabilities of ai.
 
 
 // global vars, so all functions can read
@@ -207,18 +207,18 @@ void move_ball(void)
 void move_bat(int up) 
 {
     int current_bat_position = bat[0].position_y + bat[0].height / 2;
-    if (up && current_bat_position < HEIGHT) 
-    {
-        printf("reache\n");
+    if (up== 0 && current_bat_position < HEIGHT) 
+   {
+
         // printf("Received w\n"); // Handle moving the bat up
-        bat[0].position_y -= SENSITIVITY;
+        bat[0].position_y += SENSITIVITY;
     }
 
-    if (up == 0 && current_bat_position > 0) 
+    if (up && current_bat_position > 0) 
     {
 
         // printf("Received s\n"); // Handle moving the bat down
-        bat[0].position_y += SENSITIVITY;
+        bat[0].position_y -= SENSITIVITY;
     }   
 }
 
