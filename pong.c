@@ -10,8 +10,8 @@
 #include "pong.h"
 
 #define SENSITIVITY 30          // sensitivity of bat
-#define INITIAL_VELOCITY 3      // velocity of ball
-#define AI_STRENGTH 10        // edit capabilities of ai.
+#define INITIAL_VELOCITY 7      // velocity of ball
+#define AI_STRENGTH 7           // edit capabilities of ai. lower -> ai is easier to beat
 
 
 // global vars, so all functions can read
@@ -250,15 +250,14 @@ void move_bat_opponent(void)
         int current_bat_position   = bat[1].position_y + bat[1].height / 2;
 
         if (predicted_intersection > current_bat_position && predicted_intersection < current_bat_position + 30)
-        {
-
-        }
+        { }
         
-        else if (predicted_intersection < current_bat_position)
+        else if (predicted_intersection < current_bat_position && current_bat_position > 0)
         {
             bat[1].position_y -= AI_STRENGTH;
         }
-        else if (predicted_intersection > current_bat_position)
+
+        else if (predicted_intersection > current_bat_position && current_bat_position < HEIGHT)
         {
             bat[1].position_y += AI_STRENGTH;
         }
