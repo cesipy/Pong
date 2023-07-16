@@ -3,7 +3,7 @@
 
 #include <SDL.h>
 
-#define WIDTH 1400
+#define WIDTH  1100
 #define HEIGHT 1000
 
 // definitions of functions

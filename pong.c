@@ -1,7 +1,6 @@
 /**
  * instant todo:
  *  - improve error handling
- *  - 0
 */
 
 #include <SDL.h>
@@ -10,8 +9,14 @@
 #include "pong.h"
 
 #define SENSITIVITY 30          // sensitivity of bat
-#define INITIAL_VELOCITY 7      // velocity of ball
-#define AI_STRENGTH 7           // edit capabilities of ai. lower -> ai is easier to beat
+#define INITIAL_VELOCITY 5      // velocity of ball (optimal 3 - 6)
+#define AI_STRENGTH 4           // edit capabilities of ai. lower -> AI is easier to beat 
+/**
+ * recommended values:
+ * - sensitivity:      15 (slower and more difficult) to 45 (faster and easier), optimal 30
+ * - initial_velocity: 3  (slower) to 6 (faster), optimal 4
+ * - ai_strength:      3  (possible to beat) to 7 (impossible to beat), depends on velocity, opitmal 4
+*/
 
 
 // global vars, so all functions can read
@@ -225,6 +230,8 @@ void move_bat(int up)
 
 /**
  * ai moves the opponent's bat.
+ * strength of AI can be adjusted by setting macro AI_STRENGTH
+ *  AI_STRENGTH --- (continue!)
  */
 void move_bat_opponent(void)
 {
@@ -235,30 +242,40 @@ void move_bat_opponent(void)
     {
         if (bat[1].position_y < middle)
         {
+
             bat[1].position_y += AI_STRENGTH;
         }
+
         else if (bat[1].position_y > middle)
         {
+
             bat[1].position_y -= AI_STRENGTH;
         }
     }
     // ball moves towards ai's bat
     else if (ball.vector_x < 0)
     {
+
         // calculate the predicted intersection point of the ball and the AI's bat
-        int predicted_intersection = ball.position_y + (bat[1].position_x - ball.position_x) * ball.vector_y / ball.vector_x;
+        int predicted_intersection = ball.position_y + 
+                (bat[1].position_x - ball.position_x) * ball.vector_y / ball.vector_x;
+
         int current_bat_position   = bat[1].position_y + bat[1].height / 2;
 
-        if (predicted_intersection > current_bat_position && predicted_intersection < current_bat_position + 30)
+        if (predicted_intersection > current_bat_position 
+            && predicted_intersection < current_bat_position + 30)
         { }
         
-        else if (predicted_intersection < current_bat_position && current_bat_position > 0)
+        else if (predicted_intersection < current_bat_position 
+            && current_bat_position > 0)
         {
+
             bat[1].position_y -= AI_STRENGTH;
         }
 
         else if (predicted_intersection > current_bat_position && current_bat_position < HEIGHT)
         {
+
             bat[1].position_y += AI_STRENGTH;
         }
     }
@@ -303,7 +320,7 @@ void collision(int player)
     if (ball_condition1 && ball_condition2 && ball_condition3 && ball_condition4)
     {
         // collision occurred, reverse the ball's x direction
-        ball.vector_x = -ball.vector_x;
+        ball.vector_x = -ball.vector_x; 
 
         // update ball's y dirction
 
@@ -314,7 +331,14 @@ void collision(int player)
         int ball_center_y = ball.position_y + ball.height / 2;
 
         // compute y value
-        ball.vector_y = (ball_center_y - bat_center_y) / 8; // can be adjusted, controles velocity
+        ball.vector_y = (ball_center_y - bat_center_y);
+
+        /* 
+        adjust_velocity is used to control the velocity after a collision occurred.
+        smaller number means 
+        */
+        int adjusting_velocity = 8;
+        ball.vector_y = ball.vector_y / 8;
     }
 }
 
