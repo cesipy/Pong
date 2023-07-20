@@ -2,9 +2,14 @@
 #define PONG_H
 
 #include <SDL.h>
+#include <stdio.h>
+
 
 #define WIDTH  1100
-#define HEIGHT 1000
+#define HEIGHT 850
+
+enum state{ START, DRAW, PLAYER_WINS, AI_WINS };
+
 
 // definitions of functions
 void init_SDL();

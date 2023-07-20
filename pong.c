@@ -8,14 +8,15 @@
 #include <stdlib.h>
 #include "pong.h"
 
+
 #define SENSITIVITY 30          // sensitivity of bat
 #define INITIAL_VELOCITY 5      // velocity of ball (optimal 3 - 6)
-#define AI_STRENGTH 4           // edit capabilities of ai. lower -> AI is easier to beat 
+#define AI_STRENGTH 5           // edit capabilities of ai. lower -> AI is easier to beat 
 /**
  * recommended values:
  * - sensitivity:      15 (slower and more difficult) to 45 (faster and easier), optimal 30
  * - initial_velocity: 3  (slower) to 6 (faster), optimal 4
- * - ai_strength:      3  (possible to beat) to 7 (impossible to beat), depends on velocity, opitmal 4
+ * - ai_strength:      3  (possible to beat) to 7 (impossible to beat), depends on velocity, opitmal 5
 */
 
 
@@ -36,7 +37,7 @@ int main(int argc, char* argv[]) {
     init();
 
     int shutdown_flag = 0;
-    app.game_state = 0;         // create a enum for state and handle them
+    app.game_state = 0;         // TODO: create a enum for state and handle them
 
     // Define target frame rate
     const int TARGET_FPS = 60;
@@ -51,8 +52,6 @@ int main(int argc, char* argv[]) {
         prepare_scene();
 
         shutdown_flag = check_input(shutdown_flag);
-
-        //printf("ball_y %d, vector x %d, vector y %d\n", ball.position_y, ball.vector_x, ball.vector_y);
 
         // move AI's bat
         move_bat_opponent();
@@ -215,14 +214,14 @@ void move_bat(int up)
     if (up== 0 && current_bat_position < HEIGHT) 
    {
 
-        // printf("Received w\n"); // Handle moving the bat up
+        // Handle moving the bat up
         bat[0].position_y += SENSITIVITY;
     }
 
     if (up && current_bat_position > 0) 
     {
 
-        // printf("Received s\n"); // Handle moving the bat down
+        // Handle moving the bat down
         bat[0].position_y -= SENSITIVITY;
     }   
 }
@@ -324,10 +323,9 @@ void collision(int player)
 
         // update ball's y dirction
 
-        // get bat center
+
         int bat_center_y = bat[player].position_y + bat[player].height / 2;
 
-        // get ball center
         int ball_center_y = ball.position_y + ball.height / 2;
 
         // compute y value
@@ -338,7 +336,7 @@ void collision(int player)
         smaller number means 
         */
         int adjusting_velocity = 8;
-        ball.vector_y = ball.vector_y / 8;
+        ball.vector_y = ball.vector_y / adjusting_velocity;
     }
 }
 
