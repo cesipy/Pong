@@ -1,7 +1,7 @@
 CC = gcc
 CFLAGS = -Iinclude/SDL2
 LDFLAGS = -Llib
-LIBS = -lSDL2 
+LIBS = -lSDL2 -LSDL2_ttf
 
 all: testing_with_sdl
 
