@@ -9,6 +9,7 @@
 #include "pong.h"
 
 
+
 #define SENSITIVITY 30          // sensitivity of bat
 #define INITIAL_VELOCITY 5      // velocity of ball (optimal 3 - 6)
 #define AI_STRENGTH 5           // edit capabilities of ai. lower -> AI is easier to beat 
@@ -25,7 +26,7 @@ App app;
 Ball ball;
 Bat bat[2];          // two bats for player and ai opponent
 SDL_Event event;
-int score[2];
+int score[2];        // scores for each player. score[0] = player, score[1] = ai
 
 
 /*------------------------------------------------------------------------------*/
@@ -37,7 +38,7 @@ int main(int argc, char* argv[]) {
     init();
 
     int shutdown_flag = 0;
-    app.game_state = 0;         // TODO: create a enum for state and handle them
+    app.game_state = START;         // TODO: create a enum for state and handle them
 
     // Define target frame rate
     const int TARGET_FPS = 60;
@@ -69,6 +70,13 @@ int main(int argc, char* argv[]) {
         // draw for this iteration
         present_scene();
 
+
+        // prepare score
+        char score_text[50];
+        snprintf(score_text, sizeof(score_text), "%d - %d\n", score[1], score[0]);
+
+        SDL_Color sdl_color = {255, 255, 255, 255};
+        // SDL_Surface* sdl_surface 
 
 
         // update ball by its vector
@@ -386,6 +394,15 @@ int check_input(int shutdown_flag)
             }
         }
         return shutdown_flag;
+}
+
+
+void draw_score(void) 
+{
+    SDL_Rect sdl_rect_source;
+    SDL_Rect sdl_rect_dest;
+
+    SDL_BlitSurface
 }
 
 
