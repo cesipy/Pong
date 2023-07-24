@@ -79,14 +79,6 @@ int main(int argc, char* argv[]) {
         present_scene();
 
 
-        // prepare score
-        char score_text[50];
-        snprintf(score_text, sizeof(score_text), "%d - %d\n", score[1], score[0]);
-
-        SDL_Color sdl_color = {255, 255, 255, 255};
-        // SDL_Surface* sdl_surface 
-
-
         // update ball by its vector
         move_ball();
 
@@ -429,6 +421,7 @@ void draw_score(TTF_Font* font)
     rect.w = 100;
 
     SDL_RenderCopy(app.renderer, message, NULL, &rect);
+    SDL_DestroyTexture(message);
 }
 
 /**

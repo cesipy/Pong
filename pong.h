@@ -2,6 +2,7 @@
 #define PONG_H
 
 #include <SDL2/SDL.h>
+#include <SDL2_ttf/SDL_ttf.h>
 #include <stdio.h>
 
 
@@ -21,6 +22,7 @@ void present_scene(void);
 SDL_Texture* load_texture(char* path);
 void render_texture(SDL_Texture* texture, int x, int y, int w, int h);
 int check_input(int);
+void draw_score(TTF_Font* font);
 
 void move_bat(int up_or_down);
 void move_bat_opponent();
