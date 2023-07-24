@@ -44,7 +44,7 @@ int main(int argc, char* argv[]) {
     TTF_Init();
 
     // open font for score drawing
-    TTF_Font* sans = TTF_OpenFont("graphics/sans.ttf", 24);
+    TTF_Font* sans = TTF_OpenFont("graphics/sans.ttf", 128);
 
     // Define target frame rate
     const int TARGET_FPS = 60;
@@ -415,8 +415,8 @@ void draw_score(TTF_Font* font)
     SDL_Texture* message = SDL_CreateTextureFromSurface(app.renderer, surfaceMessage);
 
     SDL_Rect rect;
-    rect.x = 100;
-    rect.y = 100;
+    rect.x = WIDTH  / 2 - 50;
+    rect.y = 30;
     rect.h = 100;
     rect.w = 100;
 
