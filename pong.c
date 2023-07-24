@@ -3,11 +3,11 @@
  *  - improve error handling
 */
 
-#include <SDL.h>
+#include <SDL2/SDL.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include "pong.h"
-
+#include <SDL2_ttf/SDL_ttf.h>
 
 
 #define SENSITIVITY 30          // sensitivity of bat
@@ -33,12 +33,15 @@ int score[2];        // scores for each player. score[0] = player, score[1] = ai
 
 
 int main(int argc, char* argv[]) {
-    
+
     // initialize the game
     init();
 
     int shutdown_flag = 0;
     app.game_state = START;         // TODO: create a enum for state and handle them
+
+    // open font for score drawing
+    TTF_Font* sans = TTF_OpenFont("graphics/sans.ttf", 24);
 
     // Define target frame rate
     const int TARGET_FPS = 60;
@@ -397,12 +400,28 @@ int check_input(int shutdown_flag)
 }
 
 
-void draw_score(void) 
+//SDL_Texture* 
+void draw_score(TTF_Font* font)
 {
-    SDL_Rect sdl_rect_source;
-    SDL_Rect sdl_rect_dest;
+    SDL_Color white = {255, 255, 255};
 
-    SDL_BlitSurface
+    // create score message
+    char score_message[50];
+    snprintf(score_message, sizeof(score_message), "%d - %d", score[1], score[0]);
+
+    // render to surface
+    SDL_Surface* surfaceMessage =
+        TTF_RenderText_Solid(font, score_message, white); 
+
+    SDL_Texture* message = SDL_CreateTextureFromSurface(app.renderer, surfaceMessage);
+
+    SDL_Rect rect;
+    rect.x = 100;
+    rect.y = 100;
+    rect.h = 100;
+    rect.w = 100;
+
+    SDL_RenderCopy(app.renderer, message, NULL, &rect);
 }
 
 
