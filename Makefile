@@ -1,20 +1,8 @@
-CC = gcc
-CFLAGS = -Iinclude/SDL2
-LDFLAGS = -Llib
-LIBS = -lSDL2 -LSDL2_ttf
-
-all: testing_with_sdl
-
-testing_with_sdl: testing_with_sdl.c
-	$(CC) $(CFLAGS) $(LDFLAGS) testing_with_sdl.c -o test $(LIBS)
-
+all: pong
 
 pong: pong.c
-	$(CC) $(CFLAGS) $(LDFLAGS) pong.c -o pong $(LIBS)
+	gcc -Iinclude $(shell pkg-config --cflags sdl2 SDL2_ttf) pong.c -o pong $(shell pkg-config --libs sdl2 SDL2_ttf)
 
-
-.PHONY:
+.PHONY: clean
 clean:
 	rm -f pong test
-
-
