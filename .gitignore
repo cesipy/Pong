@@ -4,3 +4,5 @@ pong
 .vscode
 .idea
 include/.DS_Store
+include
+lib
