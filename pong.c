@@ -40,6 +40,9 @@ int main(int argc, char* argv[]) {
     int shutdown_flag = 0;
     app.game_state = START;         // TODO: create a enum for state and handle them
 
+    // intit sld_ttf
+    TTF_Init();
+
     // open font for score drawing
     TTF_Font* sans = TTF_OpenFont("graphics/sans.ttf", 24);
 
@@ -69,6 +72,8 @@ int main(int argc, char* argv[]) {
 
         // draw opponent bat
         render_texture(bat[1].texture, bat[1].position_x, bat[1].position_y, bat[1].width, bat[1].height);
+
+        draw_score(sans);
         
         // draw for this iteration
         present_scene();
@@ -97,6 +102,8 @@ int main(int argc, char* argv[]) {
     printf("Score: player - AI\n\t    %d - %d\n", score[0], score[1]);
 
     // clean up
+    TTF_CloseFont(sans);
+    TTF_Quit();
     SDL_DestroyTexture(ball.texture);
     SDL_DestroyRenderer(app.renderer);
     SDL_DestroyWindow(app.window);
@@ -423,7 +430,6 @@ void draw_score(TTF_Font* font)
 
     SDL_RenderCopy(app.renderer, message, NULL, &rect);
 }
-
 
 /**
  * clear current render and prepare with color
