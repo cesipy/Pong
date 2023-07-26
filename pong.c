@@ -13,6 +13,7 @@
 #define SENSITIVITY 30          // sensitivity of bat
 #define INITIAL_VELOCITY 5      // velocity of ball (optimal 3 - 6)
 #define AI_STRENGTH 5           // edit capabilities of ai. lower -> AI is easier to beat 
+#define NUMBER_MIDDLE_LINES 4
 /**
  * recommended values:
  * - sensitivity:      15 (slower and more difficult) to 45 (faster and easier), optimal 30
@@ -25,7 +26,10 @@
 App app;
 Ball ball;
 Bat bat[2];          // two bats for player and ai opponent
+Middle_Line middle_line[NUMBER_MIDDLE_LINES];
 SDL_Event event;
+
+
 int score[2];        // scores for each player. score[0] = player, score[1] = ai
 
 
@@ -62,6 +66,8 @@ int main(int argc, char* argv[]) {
 
         // move AI's bat
         move_bat_opponent();
+
+        draw_middle_line();
 
         // draw ball
         render_texture(ball.texture, ball.position_x, ball.position_y, ball.width, ball.height);
@@ -137,6 +143,23 @@ void init(void)
     bat[1].width = 15;
 
     bat[1].texture = load_texture("graphics/bat.bmp");
+
+
+    // initialize middle line
+    int incr = HEIGHT / NUMBER_MIDDLE_LINES;
+    int middle = WIDTH / 2;
+    int counter = 0;
+    for (int i = 10; i < HEIGHT; i += incr)
+    {
+        middle_line[counter].position_x = middle;
+        middle_line[counter].position_y = i;
+        middle_line[counter].height = 120;
+        middle_line[counter].width = 120;
+
+        middle_line[counter].texture = load_texture("graphics/rect.bmp");
+
+        counter++;
+    }
 
 }
 
@@ -422,6 +445,15 @@ void draw_score(TTF_Font* font)
 
     SDL_RenderCopy(app.renderer, message, NULL, &rect);
     SDL_DestroyTexture(message);
+}
+
+void draw_middle_line() 
+{
+    for(int i=0; i < NUMBER_MIDDLE_LINES; i++)
+    {
+        render_texture(middle_line[i].texture, middle_line[i].position_x, middle_line[i].position_y, 
+            middle_line[i].width, middle_line[i].height);
+    }
 }
 
 /**
