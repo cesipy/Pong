@@ -13,7 +13,7 @@
 #define SENSITIVITY 30          // sensitivity of bat
 #define INITIAL_VELOCITY 5      // velocity of ball (optimal 3 - 6)
 #define AI_STRENGTH 5           // edit capabilities of ai. lower -> AI is easier to beat 
-#define NUMBER_MIDDLE_LINES 7
+#define NUMBER_MIDDLE_LINES 8
 /**
  * recommended values:
  * - sensitivity:      15 (slower and more difficult) to 45 (faster and easier), optimal 30
@@ -28,7 +28,6 @@ Ball ball;
 Bat bat[2];          // two bats for player and ai opponent
 Middle_Line middle_line[NUMBER_MIDDLE_LINES];
 SDL_Event event;
-
 
 int score[2];        // scores for each player. score[0] = player, score[1] = ai
 
@@ -148,9 +147,10 @@ void init(void)
 
     // initialize middle line
     int incr = (HEIGHT / NUMBER_MIDDLE_LINES);
-    int middle = WIDTH / 2;
+    int middle = WIDTH / 2 - 5;                     // -5 because width of rectangle is 10
     int counter = 0;
-    for (int i = 10; i < HEIGHT; i += incr)
+
+    for (int i = 25; i < HEIGHT; i += incr)
     {
         middle_line[counter].position_x = middle;
         middle_line[counter].position_y = i;
