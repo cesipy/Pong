@@ -47,7 +47,8 @@ int main(int argc, char* argv[]) {
     TTF_Init();
 
     // open font for score drawing
-    TTF_Font* sans = TTF_OpenFont("graphics/sans.ttf", 128);
+    TTF_Font* sans = TTF_OpenFont("graphics/fonts/sans.ttf", 128);
+    TTF_Font* fraunces = TTF_OpenFont("graphics/fonts/fraunces.ttf", 256);
 
     // Define target frame rate
     const int TARGET_FPS = 60;
@@ -79,7 +80,8 @@ int main(int argc, char* argv[]) {
         // draw opponent bat
         render_texture(bat[1].texture, bat[1].position_x, bat[1].position_y, bat[1].width, bat[1].height);
 
-        draw_score(sans);
+        //draw_score(sans);
+        draw_score(fraunces);
         
         // draw for this iteration
         present_scene();
@@ -100,7 +102,8 @@ int main(int argc, char* argv[]) {
     printf("Score: player - AI\n\t    %d - %d\n", score[0], score[1]);
 
     // clean up
-    TTF_CloseFont(sans);
+    //TTF_CloseFont(sans);
+    TTF_CloseFont(fraunces);
     TTF_Quit();
     SDL_DestroyTexture(ball.texture);
     SDL_DestroyRenderer(app.renderer);
@@ -426,7 +429,7 @@ int check_input(int shutdown_flag)
 //SDL_Texture* 
 void draw_score(TTF_Font* font)
 {
-    SDL_Color white = {255, 255, 255};
+    SDL_Color white = {10, 10, 10};
 
     // create score message
     char score_message[50];
@@ -439,14 +442,15 @@ void draw_score(TTF_Font* font)
     SDL_Texture* message = SDL_CreateTextureFromSurface(app.renderer, surfaceMessage);
 
     SDL_Rect rect;
-    rect.x = WIDTH  / 2 - 50;
-    rect.y = 30;
-    rect.h = 100;
-    rect.w = 100;
+    rect.x = WIDTH  / 2 - 30;
+    rect.y = 50;
+    rect.h = 60;
+    rect.w = 60;
 
     SDL_RenderCopy(app.renderer, message, NULL, &rect);
     SDL_DestroyTexture(message);
 }
+
 
 void draw_middle_line() 
 {
