@@ -13,7 +13,7 @@
 #define SENSITIVITY 30          // sensitivity of bat
 #define INITIAL_VELOCITY 5      // velocity of ball (optimal 3 - 6)
 #define AI_STRENGTH 5           // edit capabilities of ai. lower -> AI is easier to beat 
-#define NUMBER_MIDDLE_LINES 4
+#define NUMBER_MIDDLE_LINES 7
 /**
  * recommended values:
  * - sensitivity:      15 (slower and more difficult) to 45 (faster and easier), optimal 30
@@ -67,6 +67,7 @@ int main(int argc, char* argv[]) {
         // move AI's bat
         move_bat_opponent();
 
+        // draw the middle line
         draw_middle_line();
 
         // draw ball
@@ -146,7 +147,7 @@ void init(void)
 
 
     // initialize middle line
-    int incr = HEIGHT / NUMBER_MIDDLE_LINES;
+    int incr = (HEIGHT / NUMBER_MIDDLE_LINES);
     int middle = WIDTH / 2;
     int counter = 0;
     for (int i = 10; i < HEIGHT; i += incr)
