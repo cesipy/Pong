@@ -23,19 +23,22 @@ SDL_Texture* load_texture(char* path);
 void render_texture(SDL_Texture* texture, int x, int y, int w, int h);
 int check_input(int);
 void draw_score(TTF_Font* font);
+void draw_middle_line(void);
 
 void move_bat(int up_or_down);
 void move_bat_opponent();
 void move_ball();
 void collision(int);
 
-typedef struct {
+typedef struct 
+{
     SDL_Renderer* renderer;
     SDL_Window* window;
     int game_state;
 } App;
 
-typedef struct {
+typedef struct 
+{
     int position_x;
     int position_y;
     int height;
@@ -49,7 +52,8 @@ typedef struct {
     SDL_Texture* texture;
 } Ball;
 
-typedef struct {
+typedef struct 
+{
     int position_x;
     int position_y;
     int height;
@@ -59,5 +63,16 @@ typedef struct {
     SDL_Texture* texture;
 } Bat;
 
+
+typedef struct 
+{
+int position_x;
+int position_y;
+int height;
+int width;
+
+// texture
+SDL_Texture* texture;
+} Middle_Line;
 
 #endif
