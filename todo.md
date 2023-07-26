@@ -19,3 +19,4 @@
  - [ ] change font to right one
  - [ ] make a dotted line in middle
  - [ ] implement mode where ai plays against AI
+ - [ ] make the ai bat prediction a bit more random
