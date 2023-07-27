@@ -9,7 +9,6 @@
 #include "pong.h"
 #include <SDL2_ttf/SDL_ttf.h>
 
-
 #define SENSITIVITY 30          // sensitivity of bat
 #define INITIAL_VELOCITY 5      // velocity of ball (optimal 3 - 6)
 #define AI_STRENGTH 10          // edit capabilities of ai. lower -> AI is easier to beat 
@@ -20,7 +19,6 @@
  * - initial_velocity: 3  (slower) to 6 (faster), optimal 4
  * - ai_strength:      3  (possible to beat) to 7 (impossible to beat), depends on velocity, opitmal 5
 */
-
 
 // global vars, so all functions can read
 App app;
@@ -42,10 +40,12 @@ int main(int argc, char* argv[]) {
         printf("AI vs AI mode!\n");
         app.game_state = AI_VS_AI;
     } 
+
     else if (argc == 1) 
     {
         app.game_state = NORMAL;    // set to normal game state
     } 
+
     else 
     {
         fprintf(stderr, "Incorrect usage! To play AI vs AI, use: %s -ai\n", argv[0]);
@@ -146,23 +146,17 @@ void init(void)
 
     ball.height = 25;
     ball.width = 25;
-
     ball.texture = load_texture("graphics/ball.bmp");
-
 
     // initialize bat
     bat[0].height = 100;
     bat[0].width= 15;
-
     bat->texture = load_texture("graphics/bat.bmp");
-
 
     // initialize opponent bat
     bat[1].height = 100;
     bat[1].width = 15;
-
     bat[1].texture = load_texture("graphics/bat.bmp");
-
 
     // initialize middle line
     int incr = (HEIGHT / NUMBER_MIDDLE_LINES);
@@ -175,12 +169,10 @@ void init(void)
         middle_line[counter].position_y = i;
         middle_line[counter].height = 120;
         middle_line[counter].width = 120;
-
         middle_line[counter].texture = load_texture("graphics/rect.bmp");
 
         counter++;
     }
-
 }
 
 
@@ -255,7 +247,6 @@ void move_ball(void)
 }
 
 
-
 /**
  * moves th bat ether up or down
  * up = 1 -> move bat up
@@ -295,20 +286,17 @@ void move_bat_opponent(void)
 
         if (bat[1].position_y < middle)
         {
-
             bat[1].position_y += AI_STRENGTH;
         }
 
         else if (bat[1].position_y > middle)
         {
-
             bat[1].position_y -= AI_STRENGTH;
         }
     }
     // ball moves towards ai's bat
     else if (ball.vector_x < 0)
     {
-
         // calculate the predicted intersection point of the ball and the AI's bat
         int predicted_intersection = ball.position_y + 
                 (bat[1].position_x - ball.position_x) * ball.vector_y / ball.vector_x;
@@ -322,13 +310,11 @@ void move_bat_opponent(void)
         else if (predicted_intersection < current_bat_position 
             && current_bat_position > 0)
         {
-
             bat[1].position_y -= AI_STRENGTH;
         }
 
         else if (predicted_intersection > current_bat_position && current_bat_position < HEIGHT)
         {
-
             bat[1].position_y += AI_STRENGTH;
         }
     }
@@ -369,14 +355,12 @@ void collision(int player)
     int ball_condition3 = ball.position_y + ball.height >= bat[player].position_y;
     int ball_condition4 = ball.position_y <= bat[player].position_y + bat[player].height;
 
-
     if (ball_condition1 && ball_condition2 && ball_condition3 && ball_condition4)
     {
         // collision occurred, reverse the ball's x direction
         ball.vector_x = -ball.vector_x; 
 
         // update ball's y dirction
-
 
         int bat_center_y = bat[player].position_y + bat[player].height / 2;
 
@@ -393,7 +377,6 @@ void collision(int player)
         ball.vector_y = ball.vector_y / adjusting_velocity;
     }
 }
-
 
 
 /**
@@ -417,7 +400,6 @@ int check_input(int shutdown_flag)
             //check the input
             else if (event.type == SDL_KEYDOWN)
             {
-
                 switch (event.key.keysym.sym)
                 {
 
@@ -451,23 +433,19 @@ void move_bat_aivsai()
 
     if (ball.vector_x < 0)
     {
-
         if (bat[0].position_y < middle) 
         {
-
             bat[0].position_y += AI_STRENGTH;
         }
 
         else if (bat[0].position_y > middle)
         {
-
             bat[0].position_y -= AI_STRENGTH;
         }
     }
     // ball moves toward right ai
     else if (ball.vector_x > 0)
     {
-
         int predicted_intersection = ball.position_y +
             (bat[0].position_x - ball.position_x) * ball.vector_y / ball.vector_x;
 
