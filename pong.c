@@ -37,11 +37,27 @@ int score[2];        // scores for each player. score[0] = player, score[1] = ai
 
 int main(int argc, char* argv[]) {
 
+    if (argc == 2 && strcmp(argv[1], "-ai") == 0) 
+    {
+        printf("AI vs AI mode!\n");
+        app.game_state = AI_VS_AI;
+    } 
+    else if (argc == 1) 
+    {
+        app.game_state = NORMAL;    // set to normal game state
+    } 
+    else 
+    {
+        fprintf(stderr, "Incorrect usage! To play AI vs AI, use: %s -ai\n", argv[0]);
+        exit(EXIT_FAILURE);
+    }
+    // add error handling for more than 1 args
+
     // initialize the game
     init();
 
     int shutdown_flag = 0;
-    app.game_state = START;         // TODO: create a enum for state and handle them
+    // app.game_state = START;         // TODO: create a enum for state and handle them
 
     // intit sld_ttf
     TTF_Init();
@@ -62,7 +78,9 @@ int main(int argc, char* argv[]) {
 
         prepare_scene();
 
-        shutdown_flag = check_input(shutdown_flag);
+        shutdown_flag = check_input(shutdown_flag); // checks input and processes controls for my bat
+
+        if (app.game_state == AI_VS_AI) { move_bat_aivsai(); }
 
         // move AI's bat
         move_bat_opponent();
@@ -276,6 +294,7 @@ void move_bat_opponent(void)
     // if ball moves towards player (not ai)
     if (ball.vector_x > 0)
     {
+
         if (bat[1].position_y < middle)
         {
 
@@ -400,8 +419,10 @@ int check_input(int shutdown_flag)
             //check the input
             else if (event.type == SDL_KEYDOWN)
             {
+
                 switch (event.key.keysym.sym)
                 {
+
                 case SDLK_w:
                     // w is pressed
                     move_bat(1);
@@ -423,6 +444,54 @@ int check_input(int shutdown_flag)
             }
         }
         return shutdown_flag;
+}
+
+
+void move_bat_aivsai() 
+{
+    int middle = HEIGHT / 2 - 50;
+
+    if (ball.vector_x < 0)
+    {
+
+        if (bat[0].position_y < middle) 
+        {
+
+            bat[0].position_y += AI_STRENGTH;
+        }
+
+        else if (bat[0].position_y > middle)
+        {
+
+            bat[0].position_y -= AI_STRENGTH;
+        }
+    }
+    // ball moves toward right ai
+    else if (ball.vector_x > 0)
+    {
+
+        int predicted_intersection = ball.position_y +
+            (bat[0].position_x - ball.position_x) * ball.vector_y / ball.vector_x;
+
+        int current_bat_position   = bat[0].position_y + bat[0].height / 2;
+
+        if (predicted_intersection > current_bat_position 
+            && predicted_intersection < current_bat_position + 30)
+        { }
+        
+        else if (predicted_intersection < current_bat_position 
+            && current_bat_position > 0)
+        {
+
+            bat[0].position_y -= AI_STRENGTH;
+        }
+
+        else if (predicted_intersection > current_bat_position && current_bat_position < HEIGHT)
+        {
+
+            bat[0].position_y += AI_STRENGTH;
+        }
+    }
 }
 
 
