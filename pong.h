@@ -9,7 +9,7 @@
 #define WIDTH  1100
 #define HEIGHT 850
 
-enum state{ START, DRAW, PLAYER_WINS, AI_WINS };
+enum state{ NORMAL, DRAW, PLAYER_WINS, AI_WINS, AI_VS_AI };
 
 
 // definitions of functions
@@ -29,6 +29,8 @@ void move_bat(int up_or_down);
 void move_bat_opponent();
 void move_ball();
 void collision(int);
+
+void move_bat_aivsai(void);
 
 typedef struct 
 {
