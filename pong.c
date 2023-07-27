@@ -426,7 +426,10 @@ int check_input(int shutdown_flag)
         return shutdown_flag;
 }
 
-
+/**
+ * in the AI vs AI mode the player's bat has to be controlled using AI. 
+ * this function handles this case.
+*/
 void move_bat_aivsai() 
 {
     int middle = HEIGHT / 2 - 50;
@@ -458,20 +461,21 @@ void move_bat_aivsai()
         else if (predicted_intersection < current_bat_position 
             && current_bat_position > 0)
         {
-
             bat[0].position_y -= AI_STRENGTH;
         }
 
         else if (predicted_intersection > current_bat_position && current_bat_position < HEIGHT)
         {
-
             bat[0].position_y += AI_STRENGTH;
         }
     }
 }
 
 
-//SDL_Texture* 
+/**
+ * draws the score of the game on the board.
+ * takes a TTF_Font as input - specifies font used for the score.
+*/
 void draw_score(TTF_Font* font)
 {
     SDL_Color white = {10, 10, 10};
@@ -496,7 +500,9 @@ void draw_score(TTF_Font* font)
     SDL_DestroyTexture(message);
 }
 
-
+/**
+ * draws the middle line on the screen.
+*/
 void draw_middle_line() 
 {
     for(int i=0; i < NUMBER_MIDDLE_LINES; i++)

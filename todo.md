@@ -10,13 +10,13 @@
  - [x] handle case when bat goes beyond upper and lower edge (>HEIGHT || <0)
  - [ ] improve collison handling: ball and bat collision. collision now is too sensitive
  - [ ] limit the velocity of ball
- - [ ] implement multiple game states and handle them
+ - [x] implement multiple game states and handle them
  - [ ] improve error handling
  - [ ] free everything and clean up maybe in own function
  - [ ] fix bug when AI Strength is set to high (like 40...)
  - [ ] fix AI STRENGTH, make it relative to WIDTH
  - [ ] add sound effects
- - [ ] change font to right one
- - [ ] make a dotted line in middle
- - [ ] implement mode where ai plays against AI
+ - [x] change font to right one
+ - [x] make a dotted line in middle
+ - [x] implement mode where ai plays against AI
  - [ ] make the ai bat prediction a bit more random
