@@ -12,7 +12,7 @@
 
 #define SENSITIVITY 30          // sensitivity of bat
 #define INITIAL_VELOCITY 5      // velocity of ball (optimal 3 - 6)
-#define AI_STRENGTH 5           // edit capabilities of ai. lower -> AI is easier to beat 
+#define AI_STRENGTH 10          // edit capabilities of ai. lower -> AI is easier to beat 
 #define NUMBER_MIDDLE_LINES 8
 /**
  * recommended values:
@@ -51,15 +51,13 @@ int main(int argc, char* argv[]) {
         fprintf(stderr, "Incorrect usage! To play AI vs AI, use: %s -ai\n", argv[0]);
         exit(EXIT_FAILURE);
     }
-    // add error handling for more than 1 args
 
     // initialize the game
     init();
 
     int shutdown_flag = 0;
-    // app.game_state = START;         // TODO: create a enum for state and handle them
 
-    // intit sld_ttf
+    // init sld_ttf for the fonts and score drawing
     TTF_Init();
 
     // open font for score drawing
@@ -80,17 +78,17 @@ int main(int argc, char* argv[]) {
 
         shutdown_flag = check_input(shutdown_flag); // checks input and processes controls for my bat
 
-        if (app.game_state == AI_VS_AI) { move_bat_aivsai(); }
+        if (app.game_state == AI_VS_AI) { move_bat_aivsai(); }  // ai vs ai
 
         // move AI's bat
         move_bat_opponent();
+
 
         // draw the middle line
         draw_middle_line();
 
         // draw ball
         render_texture(ball.texture, ball.position_x, ball.position_y, ball.width, ball.height);
-
 
         // draw my bat
         render_texture(bat[0].texture, bat[0].position_x, bat[0].position_y, bat[0].width, bat[0].height);
@@ -551,7 +549,8 @@ void present_scene(void)
 
 
 /**
- *  load the texture for the ball and the bat
+ * load the texture for the ball and the bat.
+ * 
  *
  */
 SDL_Texture* load_texture(char* path) 
