@@ -58,11 +58,24 @@ int main(int argc, char* argv[]) {
     int shutdown_flag = 0;
 
     // init sld_ttf for the fonts and score drawing
-    TTF_Init();
+    if (TTF_Init() != 0) 
+    {
+        err("TTF_Init");
+        SDL_DestroyRenderer(app.renderer);
+        SDL_DestroyWindow(app.window);
+        SDL_Quit();
+    }
 
     // open font for score drawing
     TTF_Font* sans = TTF_OpenFont("graphics/fonts/sans.ttf", 128);
     TTF_Font* fraunces = TTF_OpenFont("graphics/fonts/fraunces.ttf", 256);
+    if (fraunces == NULL) 
+    {
+        err("TTF_OpenFont");
+        SDL_DestroyRenderer(app.renderer);
+        SDL_DestroyWindow(app.window);
+        SDL_Quit();
+    }
 
     // Define target frame rate
     const int TARGET_FPS = 60;
@@ -576,7 +589,23 @@ void render_texture(SDL_Texture* texture, int x, int y, int width, int height)
     //dest_rect.h = height;
 
     // use this to fetch size of .bmps
-    SDL_QueryTexture(texture, NULL, NULL, &dest_rect.w, &dest_rect.h);
+    if (SDL_QueryTexture(texture, NULL, NULL, &dest_rect.w, &dest_rect.h) != 0) 
+    {
+        err("SDL_QueryTexture");
+    }
 
-    SDL_RenderCopy(app.renderer, texture, NULL, &dest_rect);
+    if (SDL_RenderCopy(app.renderer, texture, NULL, &dest_rect) != 0)
+    {
+        err("SDL_RenderCopy");
+    }
+}
+
+
+/**
+ * handle error and print error message using perror.
+*/
+void err(char* message)
+{
+    perror(message);
+    exit(EXIT_FAILURE);
 }
