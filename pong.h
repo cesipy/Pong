@@ -31,7 +31,7 @@ void move_ball();
 void collision(int);
 
 void move_bat_aivsai(void);
-void err(char*);
+void err(const char*);
 typedef struct 
 {
     SDL_Renderer* renderer;

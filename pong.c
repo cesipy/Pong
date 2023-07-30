@@ -2,7 +2,6 @@
  * instant todo:
  *  - improve error handling
 */
-
 #include <SDL2/SDL.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -71,9 +70,10 @@ int main(int argc, char* argv[]) {
     TTF_Font* fraunces = TTF_OpenFont("graphics/fonts/fraunces.ttf", 256);
     if (fraunces == NULL) 
     {
-        err("TTF_OpenFont");
+        err("TTF_OpenFont fraunces");
         SDL_DestroyRenderer(app.renderer);
         SDL_DestroyWindow(app.window);
+        TTF_Quit();
         SDL_Quit();
     }
 
@@ -249,7 +249,6 @@ void move_ball(void)
     { 
         score[0]++;
         ball_bat_reset(0);
-
     }
     
     if (ball.position_x > WIDTH - ball.width) 
@@ -531,8 +530,14 @@ void draw_middle_line()
 */
 void prepare_scene(void)
 {
-	SDL_SetRenderDrawColor(app.renderer, 100, 0, 255, 255);
-	SDL_RenderClear(app.renderer);
+	if (SDL_SetRenderDrawColor(app.renderer, 100, 0, 255, 255) != 0) // set color
+    {
+        err("SDL_SetRenderDrawColor");
+    }
+	if (SDL_RenderClear(app.renderer) != 0) 
+    {
+        err("SDL_RenderClear");
+    }
 }
 
 
@@ -588,7 +593,7 @@ void render_texture(SDL_Texture* texture, int x, int y, int width, int height)
     //dest_rect.w = width;
     //dest_rect.h = height;
 
-    // use this to fetch size of .bmps
+    // use this to fetch size of .bmp
     if (SDL_QueryTexture(texture, NULL, NULL, &dest_rect.w, &dest_rect.h) != 0) 
     {
         err("SDL_QueryTexture");
@@ -602,10 +607,13 @@ void render_texture(SDL_Texture* texture, int x, int y, int width, int height)
 
 
 /**
- * handle error and print error message using perror.
-*/
-void err(char* message)
-{
-    perror(message);
+ * Function to handle errors.
+ * It will print the error message along with the system error message using perror.
+ * It will also exit the program with a failure status.
+ */
+void err(const char* message) {
+    char buffer[128];
+    snprintf(buffer, sizeof(buffer), "Error @ %s ", message);
+    perror(buffer);
     exit(EXIT_FAILURE);
 }
