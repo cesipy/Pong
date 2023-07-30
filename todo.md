@@ -1,25 +1,11 @@
 ## TODO list
 
- - [x] init function to initialize game
- - [x] make structs for all the elements (ball, bat, ... )
- - [x] manage score and scoreboard
- - [x] function for moving the ball & turn around if edge
- - [x] move my bat
- - [x] ai for the bat of opponent
- - [x] fix bad quality of ball
- - [x] handle case when bat goes beyond upper and lower edge (>HEIGHT || <0)
  - [ ] improve collison handling: ball and bat collision. collision now is too sensitive
  - [ ] limit the velocity of ball
- - [x] implement multiple game states and handle them
- - [ ] improve error handling
- - [ ] free everything and clean up maybe in own function
  - [ ] fix bug when AI Strength is set to high (like 40...)
  - [ ] fix AI STRENGTH, make it relative to WIDTH
  - [ ] add sound effects
- - [x] change font to right one
- - [x] make a dotted line in middle
- - [x] implement mode where ai plays against AI
  - [ ] make the ai bat prediction a bit more random
  - [ ] handle the messages in terminal, not too many
- - [ ] update README
+ - [ ] **update README**
  
