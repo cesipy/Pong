@@ -559,8 +559,6 @@ SDL_Texture* load_texture(char* path)
 {
     SDL_Texture* texture = NULL;
 
-    SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_INFO, "Loading %s", path);
-
     SDL_Surface* surface = SDL_LoadBMP(path);
     if (surface == NULL) 
     {
