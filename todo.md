@@ -20,3 +20,6 @@
  - [x] make a dotted line in middle
  - [x] implement mode where ai plays against AI
  - [ ] make the ai bat prediction a bit more random
+ - [ ] handle the messages in terminal, not too many
+ - [ ] update README
+ 
