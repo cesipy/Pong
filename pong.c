@@ -9,9 +9,10 @@
 #include <SDL2_ttf/SDL_ttf.h>
 
 #define SENSITIVITY 30          // sensitivity of bat
-#define INITIAL_VELOCITY 5      // velocity of ball (optimal 3 - 6)
-#define AI_STRENGTH 10          // edit capabilities of ai. lower -> AI is easier to beat 
+#define INITIAL_VELOCITY 15      // velocity of ball (optimal 3 - 6)
+#define AI_STRENGTH 10         // edit capabilities of ai. lower -> AI is easier to beat 
 #define NUMBER_MIDDLE_LINES 8
+#define ADJUST_RANDOMNESS  1    // higher -> less randomness
 /**
  * recommended values:
  * - sensitivity:      15 (slower and more difficult) to 45 (faster and easier), optimal 30
@@ -33,6 +34,8 @@ int score[2];        // scores for each player. score[0] = player, score[1] = ai
 
 
 int main(int argc, char* argv[]) {
+
+    //while (1) { printf("%d\n", random_num(1, 100)); }
 
     if (argc == 2 && strcmp(argv[1], "-ai") == 0) 
     {
@@ -292,11 +295,13 @@ void move_bat_opponent(void)
 {
     int middle = HEIGHT / 2 - 50;
 
-    // if ball moves towards player (not ai)
+    // if ball moves towards player (not ai), move bat to middle
     if (ball.vector_x > 0)
     {
+        if (bat[1].position_y > middle - 20 && bat[1].position_y < middle + 20)
+        { }
 
-        if (bat[1].position_y < middle)
+        else if (bat[1].position_y < middle)
         {
             bat[1].position_y += AI_STRENGTH;
         }
@@ -315,18 +320,29 @@ void move_bat_opponent(void)
 
         int current_bat_position   = bat[1].position_y + bat[1].height / 2;
 
+        // generate random number
+        int random_number = random_num(0, AI_STRENGTH / ADJUST_RANDOMNESS); 
+
+        int random_number2 = random_num(1, 10);
+        
+        //calculate the increment 
+        int incr_decr = random_number2 % 2 == 0 ? random_number : -random_number;
+        //printf("incr_decr: %d\n", incr_decr);
+
         if (predicted_intersection > current_bat_position 
-            && predicted_intersection < current_bat_position + 30)
+            && predicted_intersection < current_bat_position + 40)
         { }
         
         else if (predicted_intersection < current_bat_position 
             && current_bat_position > 0)
         {
-            bat[1].position_y -= AI_STRENGTH;
+            int decr = AI_STRENGTH + incr_decr;
+            bat[1].position_y -= decr;
         }
 
         else if (predicted_intersection > current_bat_position && current_bat_position < HEIGHT)
         {
+            int incr = AI_STRENGTH + incr_decr;
             bat[1].position_y += AI_STRENGTH;
         }
     }
@@ -448,7 +464,10 @@ void move_bat_aivsai()
 
     if (ball.vector_x < 0)
     {
-        if (bat[0].position_y < middle) 
+        if (bat[1].position_y > middle - 20 && bat[1].position_y < middle + 20)
+        { }
+
+        else if (bat[0].position_y < middle) 
         {
             bat[0].position_y += AI_STRENGTH;
         }
@@ -466,18 +485,27 @@ void move_bat_aivsai()
 
         int current_bat_position   = bat[0].position_y + bat[0].height / 2;
 
+        // generate random number
+        int random_number = random_num(0, AI_STRENGTH / ADJUST_RANDOMNESS); 
+        
+        //calculate the increment 
+        int incr_decr = random_number % 2 == 0 ? random_number : -random_number;
+        printf("incr_decr: %d\n", incr_decr);
+
         if (predicted_intersection > current_bat_position 
-            && predicted_intersection < current_bat_position + 30)
+            && predicted_intersection < current_bat_position + 40)
         { }
         
         else if (predicted_intersection < current_bat_position 
             && current_bat_position > 0)
         {
-            bat[0].position_y -= AI_STRENGTH;
+            int decr = AI_STRENGTH + incr_decr;
+            bat[0].position_y -= decr;
         }
 
         else if (predicted_intersection > current_bat_position && current_bat_position < HEIGHT)
         {
+            int incr = AI_STRENGTH + incr_decr;
             bat[0].position_y += AI_STRENGTH;
         }
     }
@@ -614,4 +642,8 @@ void err(const char* message) {
     snprintf(buffer, sizeof(buffer), "Error @ %s ", message);
     perror(buffer);
     exit(EXIT_FAILURE);
+}
+
+int random_num(int min, int max) {
+    return min + rand() % (max - min + 1);
 }
