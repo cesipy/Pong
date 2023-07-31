@@ -8,10 +8,10 @@
 #include "pong.h"
 #include <SDL2_ttf/SDL_ttf.h>
 
-#define SENSITIVITY 30          // sensitivity of bat
+#define SENSITIVITY 35          // sensitivity of bat
 #define INITIAL_VELOCITY 5      // velocity of ball (optimal 3 - 6)
 #define AI_STRENGTH 10          // edit capabilities of ai. lower -> AI is easier to beat 
-#define NUMBER_MIDDLE_LINES 8
+#define NUMBER_MIDDLE_LINES 16
 #define ADJUST_RANDOMNESS  1    // higher -> less randomness
 /**
  * recommended values:
@@ -129,7 +129,6 @@ int main(int argc, char* argv[]) {
             SDL_Delay(delayTime);
         }
     }
-    printf("Score: player - AI\n\t    %d - %d\n", score[0], score[1]);
 
     // clean up
     //TTF_CloseFont(sans);
@@ -244,7 +243,6 @@ void move_ball(void)
         ball.vector_y = -ball.vector_y; 
     }
 
-
     // reverse ball direction if it hits the edges; only temporary; should reset and adjust score
     if (ball.position_x < 0) 
     { 
@@ -264,7 +262,10 @@ void move_ball(void)
  * moves th bat ether up or down
  * up = 1 -> move bat up
  * up = 0 -> move bat down
-*/
+ *
+ * @param int up - indicated direction.
+ * 1 -> move up, 2-> move down
+ */
 void move_bat(int up) 
 {
     int current_bat_position = bat[0].position_y + bat[0].height / 2;
@@ -293,7 +294,7 @@ void move_bat_opponent(void)
 {
     int middle = HEIGHT / 2 - 50;
 
-    // if ball moves towards player (not ai), move bat to middle
+    // if ball moves towards player (not AI), move bat to middle
     if (ball.vector_x > 0)
     {
         if (bat[1].position_y > middle - 20 && bat[1].position_y < middle + 20)
@@ -310,7 +311,7 @@ void move_bat_opponent(void)
         }
     }
 
-    // ball moves towards ai's bat
+    // ball moves towards AI's bat
     else if (ball.vector_x < 0)
     {
         // calculate the predicted intersection point of the ball and the AI's bat
@@ -352,7 +353,9 @@ void move_bat_opponent(void)
  * resets ball and bat to default position.
  * if flag is set, the ball's direction vector is set.
  * if flag is not set, the ball's direction vector is reversed.
-*/
+ *
+ * @param int first_init_flag - is this the first iteration?
+ */
 void ball_bat_reset(int first_init_flag)
 {
     if (first_init_flag) { ball.vector_x = INITIAL_VELOCITY; }
@@ -374,6 +377,8 @@ void ball_bat_reset(int first_init_flag)
 /**
  * checks if ball collides with bat.
  * parameter player determines which bat to check.
+ *
+ * @param int player - indicates if player (0) or AI (1)
  */
 void collision(int player) 
 {
@@ -387,7 +392,7 @@ void collision(int player)
         // collision occurred, reverse the ball's x direction
         ball.vector_x = -ball.vector_x; 
 
-        // update ball's y dirction
+        // update ball's y direction
 
         int bat_center_y = bat[player].position_y + bat[player].height / 2;
 
@@ -412,7 +417,10 @@ void collision(int player)
  * - w   -> move the bat up
  * - s   -> move the bat down
  * - esc -> exit the game
-*/
+ *
+ * @param int shutdown_flag updated given shutdown_flag
+ * @return shutdown_flag
+ */
 int check_input(int shutdown_flag) 
 {
         //check for esc for quiting
@@ -571,7 +579,7 @@ void prepare_scene(void)
 
 /**
  * update screen with present render
-*/
+ */
 void present_scene(void)
 {
 	SDL_RenderPresent(app.renderer);
@@ -580,8 +588,9 @@ void present_scene(void)
 
 /**
  * load the texture for the ball and the bat.
- * 
  *
+ * @param char* path - path of .bmp to load
+ * @return loaded texture
  */
 SDL_Texture* load_texture(char* path) 
 {
@@ -607,8 +616,14 @@ SDL_Texture* load_texture(char* path)
 
 
 /**
- * render the structure of ball / bat. 
- * takes all the coordinates and draws the object for the given frame based on its attributes
+ * * render the structure of ball / bat.
+ * takes all the coordinates and draws the object for
+ * the given frame based on its attributes
+ * @param SDL_Texture* texture  - loaded texture
+ * @param int x                 - x position of object
+ * @param int y                 - y position of object
+ * @param int width             - width of object
+ * @param height                - height of object
  */
 void render_texture(SDL_Texture* texture, int x, int y, int width, int height)
 {
@@ -633,9 +648,10 @@ void render_texture(SDL_Texture* texture, int x, int y, int width, int height)
 
 
 /**
- * Function to handle errors.
+ *  Function to handle errors.
  * It will print the error message along with the system error message using perror.
  * It will also exit the program with a failure status.
+ * @param int message - error message to be print
  */
 void err(const char* message) {
     char buffer[128];
@@ -644,6 +660,13 @@ void err(const char* message) {
     exit(EXIT_FAILURE);
 }
 
+
+/**
+ * generates a random number in the range from 'min' to 'max'.
+ * @param int min
+ * @param int max
+ * @return int - random number
+ */
 int random_num(int min, int max) {
     return min + rand() % (max - min + 1);
 }
