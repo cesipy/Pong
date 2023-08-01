@@ -78,7 +78,7 @@ int main(int argc, char* argv[]) {
         SDL_Quit();
     }
 
-    Uint32 next_game_tick = SDL_GetTicks();
+    Uint64 start = SDL_GetPerformanceCounter();
 
     while (shutdown_flag != 1) 
     {
@@ -116,14 +116,11 @@ int main(int argc, char* argv[]) {
         // update ball by its vector
         move_ball();
 
-        next_game_tick += (1000 / 60);
-        int sleep = next_game_tick - SDL_GetTicks();
+        Uint64 end = SDL_GetPerformanceCounter();
 
-        if (sleep >= 0)
-        {
+        float elapsedMS = (end - start) / (float)SDL_GetPerformanceCounter() * 1000.f;
 
-            SDL_Delay(sleep);
-        }
+        SDL_Delay(floor(16.666f - elapsedMS));
     }
 
     // clean up
