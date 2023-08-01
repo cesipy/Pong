@@ -117,9 +117,10 @@ int main(int argc, char* argv[]) {
         move_ball();
 
         Uint64 end = SDL_GetPerformanceCounter();
-
+    
         float elapsedMS = (end - start) / (float)SDL_GetPerformanceCounter() * 1000.f;
 
+        // cap to 60 fps
         SDL_Delay(floor(16.666f - elapsedMS));
     }
 
