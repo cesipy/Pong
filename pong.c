@@ -78,11 +78,7 @@ int main(int argc, char* argv[]) {
         SDL_Quit();
     }
 
-    // Define target frame rate
-    const int TARGET_FPS = 60;
-
-    // Calculate the time per frame based on the target frame rate
-    const Uint32 targetFrameTime = 1000 / TARGET_FPS;  // in milliseconds
+    Uint32 next_game_tick = SDL_GetTicks();
 
     while (shutdown_flag != 1) 
     {
@@ -120,13 +116,13 @@ int main(int argc, char* argv[]) {
         // update ball by its vector
         move_ball();
 
-        Uint32 frameEndTime = SDL_GetTicks();
-        Uint32 frameTime = frameEndTime - frameStartTime;
+        next_game_tick += (1000 / 60);
+        int sleep = next_game_tick - SDL_GetTicks();
 
-        // If the frame was rendered faster than the target frame time, introduce a delay
-        if (frameTime < targetFrameTime) {
-            Uint32 delayTime = targetFrameTime - frameTime;
-            SDL_Delay(delayTime);
+        if (sleep >= 0)
+        {
+
+            SDL_Delay(sleep);
         }
     }
 
