@@ -9,8 +9,8 @@
 #include <SDL2_ttf/SDL_ttf.h>
 
 #define SENSITIVITY 35          // sensitivity of bat
-#define INITIAL_VELOCITY 5      // velocity of ball (optimal 3 - 6)
-#define AI_STRENGTH 10          // edit capabilities of ai. lower -> AI is easier to beat 
+#define INITIAL_VELOCITY 8      // velocity of ball (optimal 3 - 6)
+#define AI_STRENGTH  2          // edit capabilities of ai. lower -> AI is easier to beat 
 #define NUMBER_MIDDLE_LINES 16
 #define ADJUST_RANDOMNESS  1    // higher -> less randomness
 /**
@@ -78,7 +78,7 @@ int main(int argc, char* argv[]) {
         SDL_Quit();
     }
 
-    Uint64 start = SDL_GetPerformanceCounter();
+    Uint32 next_game_tick = SDL_GetTicks();
 
     while (shutdown_flag != 1) 
     {
@@ -116,12 +116,14 @@ int main(int argc, char* argv[]) {
         // update ball by its vector
         move_ball();
 
-        Uint64 end = SDL_GetPerformanceCounter();
-    
-        float elapsedMS = (end - start) / (float)SDL_GetPerformanceCounter() * 1000.f;
+        next_game_tick += (1000 / 60);
+        int sleep = next_game_tick - SDL_GetTicks();
 
-        // cap to 60 fps
-        SDL_Delay(floor(16.666f - elapsedMS));
+        if (sleep >= 0)
+        {
+
+            SDL_Delay(sleep);
+        }
     }
 
     // clean up
@@ -540,6 +542,7 @@ void draw_score(TTF_Font* font)
 
     SDL_RenderCopy(app.renderer, message, NULL, &rect);
     SDL_DestroyTexture(message);
+    SDL_FreeSurface(surfaceMessage);
 }
 
 /**
