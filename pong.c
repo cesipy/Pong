@@ -11,7 +11,7 @@
 #define SENSITIVITY 35          // sensitivity of bat
 #define INITIAL_VELOCITY 8      // velocity of ball (optimal 3 - 6)
 #define AI_STRENGTH  2          // edit capabilities of ai. lower -> AI is easier to beat 
-#define NUMBER_MIDDLE_LINES 16
+#define NUMBER_MIDDLE_LINES 9
 #define ADJUST_RANDOMNESS  1    // higher -> less randomness
 /**
  * recommended values:
@@ -522,28 +522,32 @@ void move_bat_aivsai()
 */
 void draw_score(TTF_Font* font)
 {
-    SDL_Color white = {10, 10, 10};
+    SDL_Color white = {240, 240, 240};
 
     // create score message
     char score_message[50];
     snprintf(score_message, sizeof(score_message), "%d - %d", score[1], score[0]);
 
+    TTF_SetFontHinting(font, TTF_HINTING_NORMAL);
+
     // render to surface
     SDL_Surface* surfaceMessage =
-        TTF_RenderText_Solid(font, score_message, white); 
+        TTF_RenderText_Blended(font, score_message, white);  // Use TTF_RenderText_Blended
+
 
     SDL_Texture* message = SDL_CreateTextureFromSurface(app.renderer, surfaceMessage);
 
     SDL_Rect rect;
-    rect.x = WIDTH  / 2 - 30;
-    rect.y = 50;
-    rect.h = 60;
-    rect.w = 60;
+    rect.h = 140;
+    rect.w = 140;
+    rect.x = WIDTH  / 2 - rect.w /2;
+    rect.y = 15;
 
     SDL_RenderCopy(app.renderer, message, NULL, &rect);
     SDL_DestroyTexture(message);
     SDL_FreeSurface(surfaceMessage);
 }
+
 
 /**
  * draws the middle line on the screen.
