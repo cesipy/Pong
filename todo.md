@@ -8,5 +8,7 @@
  - [ ] add sound effects
  - [ ] make the ai bat prediction a bit more random
  - [ ] handle the messages in terminal, not too many
+ - [ ] ai-mode: add randomness when in equolibrum
+ - [ ] fix building up memory over time
  - [x] **update README**
- 
+ - [ ] add pics to readme
