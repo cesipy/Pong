@@ -7,6 +7,8 @@
 #include <stdlib.h>
 #include "pong.h"
 #include <SDL2_ttf/SDL_ttf.h>
+#include <SDL_mixer.h>
+
 
 #define SENSITIVITY 35          // sensitivity of bat
 #define INITIAL_VELOCITY 8      // velocity of ball (optimal 3 - 6)
@@ -190,7 +192,7 @@ void init(void)
 */
 void init_SDL(void) 
 {
-    int status_init = SDL_Init(SDL_INIT_VIDEO);
+    int status_init = SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
     if (status_init < 0 ) 
     {
         fprintf(stderr, "Error occurred @ init SDL: %s\n", SDL_GetError());
@@ -215,6 +217,12 @@ void init_SDL(void)
     {
         fprintf(stderr, "Error @ rendererCreation\n");
         exit(EXIT_FAILURE);
+    }
+
+    //Initialize SDL_mixer
+    if( Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0 )
+    {
+        printf( "SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError() );
     }
 }
 
