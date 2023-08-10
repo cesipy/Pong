@@ -29,7 +29,10 @@ Bat bat[2];          // two bats for player and ai opponent
 Middle_Line middle_line[NUMBER_MIDDLE_LINES];
 SDL_Event event;
 
-Mix_Chunk* sound = NULL;
+Mix_Chunk* sound_left1 = NULL;
+Mix_Chunk* sound_left2 = NULL;
+Mix_Chunk* sound_right1 = NULL;
+Mix_Chunk* sound_right2 = NULL;
 
 int score[2];        // scores for each player. score[0] = player, score[1] = ai
 
@@ -417,9 +420,7 @@ void collision(int player)
         int adjusting_velocity = 8;
         ball.vector_y = ball.vector_y / adjusting_velocity;
 
-
-        // play sound effect
-        Mix_PlayChannel(-1, sound, 0);
+        play_sound(player);
     }
 }
 
@@ -666,10 +667,56 @@ void render_texture(SDL_Texture* texture, int x, int y, int width, int height)
 
 void load_media(void) 
 {
-    sound = Mix_LoadWAV( "graphics/pong_sound.wav");
-    if (sound == NULL)
+    sound_left1 = Mix_LoadWAV( "graphics/sounds/pong_left_1.wav");
+    if (sound_left1 == NULL)
     {
         err("load_media");
+    }
+
+    sound_left2 = Mix_LoadWAV( "graphics/sounds/pong_left_2.wav");
+    if (sound_left1 == NULL)
+    {
+        err("load_media");
+    }
+
+    sound_right1 = Mix_LoadWAV( "graphics/sounds/pong_right_1.wav");
+    if (sound_left1 == NULL)
+    {
+        err("load_media");
+    }
+
+    sound_right2 = Mix_LoadWAV( "graphics/sounds/pong_right_2.wav");
+    if (sound_left1 == NULL)
+    {
+        err("load_media");
+    }
+}
+
+void play_sound(int side) 
+{
+    int random_number_collision_sound = random_num(0, 1);
+    if (side == 0)  // player
+    {
+        if (random_number_collision_sound == 0)
+        {
+            Mix_PlayChannel(-1, sound_right1, 0);
+        }
+        else
+        {
+            Mix_PlayChannel(-1, sound_right2, 0);
+        }
+    }
+    
+    else
+    {
+        if (random_number_collision_sound == 0)
+        {
+            Mix_PlayChannel(-1, sound_left1, 0);
+        }
+        else 
+        {
+            Mix_PlayChannel(-1, sound_left2, 0);
+        }
     }
 }
 
