@@ -29,6 +29,8 @@ Bat bat[2];          // two bats for player and ai opponent
 Middle_Line middle_line[NUMBER_MIDDLE_LINES];
 SDL_Event event;
 
+Mix_Chunk* sound = NULL;
+
 int score[2];        // scores for each player. score[0] = player, score[1] = ai
 
 
@@ -183,6 +185,9 @@ void init(void)
         middle_line[counter].texture = load_texture("graphics/rect.bmp");
 
         counter++;
+
+        // load sound effect
+        load_media();
     }
 }
 
@@ -392,7 +397,7 @@ void collision(int player)
     int ball_condition4 = ball.position_y <= bat[player].position_y + bat[player].height;
 
     if (ball_condition1 && ball_condition2 && ball_condition3 && ball_condition4)
-    {
+    {  
         // collision occurred, reverse the ball's x direction
         ball.vector_x = -ball.vector_x; 
 
@@ -411,6 +416,10 @@ void collision(int player)
         */
         int adjusting_velocity = 8;
         ball.vector_y = ball.vector_y / adjusting_velocity;
+
+
+        // play sound effect
+        Mix_PlayChannel(-1, sound, 0);
     }
 }
 
@@ -652,6 +661,15 @@ void render_texture(SDL_Texture* texture, int x, int y, int width, int height)
     if (SDL_RenderCopy(app.renderer, texture, NULL, &dest_rect) != 0)
     {
         err("SDL_RenderCopy");
+    }
+}
+
+void load_media(void) 
+{
+    sound = Mix_LoadWAV( "graphics/pong_sound.wav");
+    if (sound == NULL)
+    {
+        err("load_media");
     }
 }
 
