@@ -33,6 +33,7 @@ void collision(int);
 void move_bat_aivsai(void);
 void err(const char*);
 int random_num(int, int);
+void load_media(void);
 typedef struct 
 {
     SDL_Renderer* renderer;
