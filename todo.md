@@ -13,4 +13,8 @@
  - [x] **update README**
  - [ ] add pics to readme
  - [ ] add background music
- - [ ] add documentation
+ - [ ] add documentations
+ - [ ] add sound effect when player doesnt reach ball
+ - [ ] player vs player implementation using flag -1v1
+ - [ ] plump sound effect when ball hits wall
+ - [ ] score number too sharp/ grainy
