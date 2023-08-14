@@ -47,6 +47,12 @@ int main(int argc, char* argv[]) {
         printf("AI vs AI mode!\n");
         app.game_state = AI_VS_AI;
     } 
+    
+    else if (argc == 2 && strcmp(argv[1], "-1v1") == 0)
+    {
+        printf("Player vs Player mode! (1-vs-1)\n");
+        app.game_state = PLAYER_VS_PLAYER;
+    }
 
     else if (argc == 1) 
     {
