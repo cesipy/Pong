@@ -372,6 +372,23 @@ void move_bat_opponent(void)
 }
 
 
+/**
+ * move the second player's bat up or down based on the provided input.
+ *
+ * This function updates the position of the second player's bat based on the
+ * provided input flag. The bat can be moved upwards or downwards by a certain
+ * sensitivity value.
+ *
+ * @param int up - Indicates the direction of movement.
+ *                 - When set to 0, the bat will move downwards.
+ *                 - When set to non-zero, the bat will move upwards.
+ *
+ * @note The function is used if you run the game using the flag '-1v1'
+ *
+ * @see SENSITIVITY - The sensitivity value that determines the rate of bat movement.
+ * @see bat - The array of bat structures representing the players' bats.
+ * @see HEIGHT - The height of the game window.
+ */
 void move_bat_second_player(int up)
 {
     int current_bat_position = bat[1].position_y + bat[1].height / 2;
@@ -711,6 +728,15 @@ void render_texture(SDL_Texture* texture, int x, int y, int width, int height)
     }
 }
 
+
+/**
+ * load sound media for the game.
+ *
+ * this function loads sound files into memory using the SDL_mixer library. It
+ * loads various sound effects that are used during gameplay, such as collision
+ * sounds between the ball and bats or walls.
+ *.
+ */
 void load_media(void) 
 {
     sound_left1 = Mix_LoadWAV( "graphics/sounds/pong_left_1.wav");
@@ -751,6 +777,18 @@ void load_media(void)
 }
 
 
+/**
+ * play sound effects based on the game events.
+ *
+ * this function plays different sound effects based on the context provided by
+ * the 'side' parameter. It uses the SDL_mixer library to play audio files for
+ * collision events between the ball and bats or walls.
+ *
+ * @param int side - Specifies the context of the sound event:
+ *                   - 0: Ball collided with player's bat.
+ *                   - 1: Ball collided with opponent's bat.
+ *                   - Other values: Ball collided with top/bottom wall.
+ */
 void play_sound(int side) 
 {
     int random_number_collision_sound = random_num(0, 1);
