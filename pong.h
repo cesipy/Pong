@@ -27,6 +27,7 @@ void draw_middle_line(void);
 
 void move_bat(int up_or_down);
 void move_bat_opponent();
+void move_bat_second_player(int);
 void move_ball();
 void collision(int);
 
