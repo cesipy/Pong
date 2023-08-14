@@ -33,6 +33,8 @@ Mix_Chunk* sound_left1 = NULL;
 Mix_Chunk* sound_left2 = NULL;
 Mix_Chunk* sound_right1 = NULL;
 Mix_Chunk* sound_right2 = NULL;
+Mix_Chunk* sound_middle_wall1 = NULL;
+Mix_Chunk* sound_middle_wall2 = NULL;
 
 int score[2];        // scores for each player. score[0] = player, score[1] = ai
 
@@ -259,6 +261,7 @@ void move_ball(void)
     if (ball.position_y <= 0 || ball.position_y + ball.height >= HEIGHT) 
     { 
         ball.vector_y = -ball.vector_y; 
+        play_sound(3);
     }
 
     // reverse ball direction if it hits the edges; only temporary; should reset and adjust score
@@ -696,7 +699,20 @@ void load_media(void)
     {
         err("load_media");
     }
+
+    sound_middle_wall1 = Mix_LoadWAV( "graphics/sounds/pong_right_2.wav");
+    if (sound_middle_wall1 == NULL)
+    {
+        err("load_media");
+    }
+
+    sound_middle_wall2 = Mix_LoadWAV( "graphics/sounds/pong_right_2.wav");
+    if (sound_middle_wall2 == NULL)
+    {
+        err("load_media");
+    }
 }
+
 
 void play_sound(int side) 
 {
@@ -713,7 +729,7 @@ void play_sound(int side)
         }
     }
     
-    else
+    else if (side == 1)
     {
         if (random_number_collision_sound == 0)
         {
@@ -722,6 +738,18 @@ void play_sound(int side)
         else 
         {
             Mix_PlayChannel(-1, sound_left2, 0);
+        }
+    }
+    // ball hits the bottom/top wall
+    else 
+    {
+        if (random_number_collision_sound == 0)
+        {
+            Mix_PlayChannel(-1, sound_middle_wall1, 0);
+        }
+        else 
+        {
+            Mix_PlayChannel(-1, sound_middle_wall2, 0);
         }
     }
 }
