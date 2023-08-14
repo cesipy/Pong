@@ -695,13 +695,13 @@ void load_media(void)
         err("load_media");
     }
 
-    sound_middle_wall1 = Mix_LoadWAV( "graphics/sounds/pong_right_2.wav");
+    sound_middle_wall1 = Mix_LoadWAV( "graphics/sounds/pong_middle_wall_1.wav");
     if (sound_middle_wall1 == NULL)
     {
         err("load_media");
     }
 
-    sound_middle_wall2 = Mix_LoadWAV( "graphics/sounds/pong_right_2.wav");
+    sound_middle_wall2 = Mix_LoadWAV( "graphics/sounds/pong_middle_wall_2.wav");
     if (sound_middle_wall2 == NULL)
     {
         err("load_media");
