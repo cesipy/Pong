@@ -100,8 +100,14 @@ int main(int argc, char* argv[]) {
 
         if (app.game_state == AI_VS_AI) { move_bat_aivsai(); }  // ai vs ai
 
-        // move AI's bat
-        move_bat_opponent();
+        if (app.game_state == PLAYER_VS_PLAYER) 
+        { }
+
+        else 
+        {
+            // move AI's bat
+            move_bat_opponent();
+        }
 
 
         // draw the middle line
@@ -366,6 +372,24 @@ void move_bat_opponent(void)
 }
 
 
+void move_bat_second_player(int up)
+{
+    int current_bat_position = bat[1].position_y + bat[1].height / 2;
+    if (up== 0 && current_bat_position < HEIGHT) 
+    {
+
+        // Handle moving the bat up
+        bat[1].position_y += SENSITIVITY;
+    }
+
+    if (up && current_bat_position > 0) 
+    {
+
+        // Handle moving the bat down
+        bat[1].position_y -= SENSITIVITY;
+    }   
+}
+
 /**
  * resets ball and bat to default position.
  * if flag is set, the ball's direction vector is set.
@@ -466,6 +490,23 @@ int check_input(int shutdown_flag)
                     // s is pressed
                     move_bat(0);
                     break;
+
+                case SDLK_o:
+                    if (app.game_state == PLAYER_VS_PLAYER)
+                    {
+                        move_bat_second_player(1); 
+                    }
+                    // move other bat up
+                    break;
+
+                case SDLK_l:
+                    if (app.game_state == PLAYER_VS_PLAYER)
+                    {
+                        move_bat_second_player(0);
+                    }
+                    // move other bat down
+                    break;
+                
 
                 case SDLK_ESCAPE:
                     // esc is pressed
