@@ -9,7 +9,7 @@
 #define WIDTH  1100
 #define HEIGHT 850
 
-enum state{ NORMAL, DRAW, PLAYER_WINS, AI_WINS, AI_VS_AI };
+enum state{ NORMAL, DRAW, PLAYER_WINS, AI_WINS, AI_VS_AI, PLAYER_VS_PLAYER };
 
 
 // definitions of functions
