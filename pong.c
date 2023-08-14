@@ -30,6 +30,7 @@ Mix_Chunk* sound_right1 = NULL;
 Mix_Chunk* sound_right2 = NULL;
 Mix_Chunk* sound_middle_wall1 = NULL;
 Mix_Chunk* sound_middle_wall2 = NULL;
+Mix_Chunk* sound_score_increase = NULL;
 
 int score[2];        // scores for each player. score[0] = player, score[1] = ai
 
@@ -271,12 +272,14 @@ void move_ball(void)
     { 
         score[0]++;
         ball_bat_reset(0);
+        Mix_PlayChannel(-1, sound_score_increase, 0);
     }
     
     if (ball.position_x > WIDTH - ball.width) 
     { 
         score[1]++;
         ball_bat_reset(0);
+        Mix_PlayChannel(-1, sound_score_increase, 0);
     }
 }
 
@@ -771,6 +774,12 @@ void load_media(void)
 
     sound_middle_wall2 = Mix_LoadWAV( "graphics/sounds/pong_middle_wall_2.wav");
     if (sound_middle_wall2 == NULL)
+    {
+        err("load_media");
+    }
+
+    sound_score_increase = Mix_LoadWAV("graphics/sounds/score_increase.wav");
+    if ( sound_score_increase == NULL)
     {
         err("load_media");
     }
