@@ -1,7 +1,3 @@
-/**
- * instant todo:
- *  - improve error handling
-*/
 #include <SDL2/SDL.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -22,7 +18,6 @@
  * - ai_strength:      3  (possible to beat) to 7 (impossible to beat), depends on velocity, opitmal 5
 */
 
-// global vars, so all functions can read
 App app;
 Ball ball;
 Bat bat[2];          // two bats for player and ai opponent
@@ -58,7 +53,7 @@ int main(int argc, char* argv[]) {
 
     else if (argc == 1) 
     {
-        app.game_state = NORMAL;    // set to normal game state
+        app.game_state = NORMAL;    
     } 
 
     else 
@@ -67,7 +62,7 @@ int main(int argc, char* argv[]) {
         exit(EXIT_FAILURE);
     }
 
-    // initialize the game
+    // initialize the SDL, position of objects
     init();
 
     int shutdown_flag = 0;
