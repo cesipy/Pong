@@ -137,6 +137,7 @@ int main(int argc, char* argv[]) {
     }
 
     // clean up
+    Mix_CloseAudio();
     //TTF_CloseFont(sans);
     TTF_CloseFont(fraunces);
     TTF_Quit();
