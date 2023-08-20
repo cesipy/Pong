@@ -1,14 +1,15 @@
 #include <SDL2/SDL.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "pong.h"
 #include <SDL2_ttf/SDL_ttf.h>
 #include <SDL_mixer.h>
 
 
 #define SENSITIVITY 35          // sensitivity of bat
-#define INITIAL_VELOCITY 8      // velocity of ball (optimal 3 - 6)
-#define AI_STRENGTH  2          // edit capabilities of ai. lower -> AI is easier to beat 
+#define INITIAL_VELOCITY 10      // velocity of ball (optimal 3 - 6)
+#define AI_STRENGTH  8          // edit capabilities of ai. lower -> AI is easier to beat
 #define NUMBER_MIDDLE_LINES 9
 #define ADJUST_RANDOMNESS  1    // higher -> less randomness
 /**
