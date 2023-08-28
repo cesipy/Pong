@@ -1,22 +1,4 @@
-#include <SDL2/SDL.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include "pong.h"
-#include <SDL2_ttf/SDL_ttf.h>
-#include <SDL_mixer.h>
-
-
-#define SENSITIVITY 35          // sensitivity of bat
-#define INITIAL_VELOCITY 8      // velocity of ball (optimal 3 - 6)
-#define AI_STRENGTH  2          // edit capabilities of ai. lower -> AI is easier to beat 
-#define NUMBER_MIDDLE_LINES 9
-#define ADJUST_RANDOMNESS  1    // higher -> less randomness
-/**
- * recommended values:
- * - sensitivity:      15 (slower and more difficult) to 45 (faster and easier), optimal 30
- * - initial_velocity: 3  (slower) to 6 (faster), optimal 4
- * - ai_strength:      3  (possible to beat) to 7 (impossible to beat), depends on velocity, opitmal 5
-*/
 
 App app;
 Ball ball;
@@ -839,12 +821,7 @@ void play_sound(int side)
 }
 
 
-/**
- *  Function to handle errors.
- * It will print the error message along with the system error message using perror.
- * It will also exit the program with a failure status.
- * @param int message - error message to be print
- */
+// generate error messages
 void err(const char* message) {
     char buffer[128];
     snprintf(buffer, sizeof(buffer), "Error @ %s ", message);
@@ -852,13 +829,7 @@ void err(const char* message) {
     exit(EXIT_FAILURE);
 }
 
-
-/**
- * generates a random number in the range from 'min' to 'max'.
- * @param int min
- * @param int max
- * @return int - random number
- */
+// generate random number
 int random_num(int min, int max) {
     return min + rand() % (max - min + 1);
 }
