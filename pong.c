@@ -141,9 +141,7 @@ int main(int argc, char* argv[]) {
 /*------------------------------------------------------------------------------*/
 
 
-/**
- * initializes bats and player, as well SDL
- */
+//initializes bats and player, as well SDL
 void init(void)
 {
     // initialize the game
@@ -188,9 +186,7 @@ void init(void)
 }
 
 
-/**
- * initialized SDL player. Window and renderer in app are defined.
-*/
+// initialized SDL player. Window and renderer in app are defined.
 void init_SDL(void) 
 {
     int status_init = SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
@@ -228,12 +224,7 @@ void init_SDL(void)
 }
 
 
-/**
- * move the ball in the direction of the vector
- * 
- * sensitivity of new direction after collision is too high. 
- * this feature has to be further improved
-*/
+// move the ball in the direction of the vector
 void move_ball(void) 
 {
     ball.position_x += ball.vector_x;
@@ -682,16 +673,7 @@ SDL_Texture* load_texture(char* path)
 }
 
 
-/**
- * * render the structure of ball / bat.
- * takes all the coordinates and draws the object for
- * the given frame based on its attributes
- * @param SDL_Texture* texture  - loaded texture
- * @param int x                 - x position of object
- * @param int y                 - y position of object
- * @param int width             - width of object
- * @param height                - height of object
- */
+// render the structure of ball / bat.
 void render_texture(SDL_Texture* texture, int x, int y, int width, int height)
 {
     SDL_Rect dest_rect;
@@ -714,14 +696,7 @@ void render_texture(SDL_Texture* texture, int x, int y, int width, int height)
 }
 
 
-/**
- * load sound media for the game.
- *
- * this function loads sound files into memory using the SDL_mixer library. It
- * loads various sound effects that are used during gameplay, such as collision
- * sounds between the ball and bats or walls.
- *.
- */
+// load sound media for the game.
 void load_media(void) 
 {
     sound_left1 = Mix_LoadWAV( "graphics/sounds/pong_left_1.wav");
@@ -768,18 +743,7 @@ void load_media(void)
 }
 
 
-/**
- * play sound effects based on the game events.
- *
- * this function plays different sound effects based on the context provided by
- * the 'side' parameter. It uses the SDL_mixer library to play audio files for
- * collision events between the ball and bats or walls.
- *
- * @param int side - Specifies the context of the sound event:
- *                   - 0: Ball collided with player's bat.
- *                   - 1: Ball collided with opponent's bat.
- *                   - Other values: Ball collided with top/bottom wall.
- */
+// play sound effects based on the game events.
 void play_sound(int side) 
 {
     int random_number_collision_sound = random_num(0, 1);
@@ -828,6 +792,7 @@ void err(const char* message) {
     perror(buffer);
     exit(EXIT_FAILURE);
 }
+
 
 // generate random number
 int random_num(int min, int max) {

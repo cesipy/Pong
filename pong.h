@@ -79,13 +79,33 @@ SDL_Texture* texture;
 /*------------------------------------------------------------------------------*/
 
 // definitions of functions
+
+/**
+ * initialized SDL player. Window and renderer in app are defined.
+*/
 void init_SDL();
+
+/**
+ * initializes bats and player, as well SDL
+ */
 void init();
 void ball_bat_reset(int);
 
 void prepare_scene(void);
 void present_scene(void);
 SDL_Texture* load_texture(char* path);
+
+/**
+ * render the structure of ball / bat.
+ *
+ * takes all the coordinates and draws the object for
+ * the given frame based on its attributes
+ * @param SDL_Texture* texture  - loaded texture
+ * @param int x                 - x position of object
+ * @param int y                 - y position of object
+ * @param int width             - width of object
+ * @param height                - height of object
+ */
 void render_texture(SDL_Texture* texture, int x, int y, int w, int h);
 int check_input(int);
 void draw_score(TTF_Font* font);
@@ -94,13 +114,20 @@ void draw_middle_line(void);
 void move_bat(int up_or_down);
 void move_bat_opponent();
 void move_bat_second_player(int);
+
+/**
+ * move the ball in the direction of the vector
+ *
+ * sensitivity of new direction after collision is too high.
+ * this feature has to be further improved
+*/
 void move_ball();
 void collision(int);
 
 void move_bat_aivsai(void);
 
 /**
- *  Function to handle errors.
+ * function to handle errors.
  * It will print the error message along with the system error message using perror.
  * It will also exit the program with a failure status.
  * @param int message - error message to be print
@@ -114,7 +141,29 @@ void err(const char*);
  * @return int - random number
  */
 int random_num(int, int);
+
+/**
+ * load sound media for the game.
+ *
+ * this function loads sound files into memory using the SDL_mixer library. It
+ * loads various sound effects that are used during gameplay, such as collision
+ * sounds between the ball and bats or walls.
+ *
+ */
 void load_media(void);
+
+/**
+ * play sound effects based on the game events.
+ *
+ * this function plays different sound effects based on the context provided by
+ * the 'side' parameter. It uses the SDL_mixer library to play audio files for
+ * collision events between the ball and bats or walls.
+ *
+ * @param int side - Specifies the context of the sound event:
+ *                   - 0: Ball collided with player's bat.
+ *                   - 1: Ball collided with opponent's bat.
+ *                   - Other values: Ball collided with top/bottom wall.
+ */
 void play_sound(int);
 
 #endif
