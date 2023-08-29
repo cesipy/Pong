@@ -181,8 +181,8 @@ void init(void)
         counter++;
 
         // load sound effect
-        load_media();
     }
+    load_media();
 }
 
 
