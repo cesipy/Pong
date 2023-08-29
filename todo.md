@@ -18,3 +18,4 @@
  - [x] player vs player implementation using flag -1v1
  - [x] plump sound effect when ball hits wall
  - [x] score number too sharp/ grainy
+ - [ ] close function
