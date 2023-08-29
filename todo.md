@@ -11,10 +11,11 @@
  - [ ] ai-mode: add randomness when in equolibrum, and less determinism
  - [x] fix building up memory over time
  - [x] **update README**
- - [ ] add pics to readme
+ - [x] add pics to readme
  - [ ] add background music
  - [x] add documentations
  - [x] add sound effect when player doesnt reach ball
  - [x] player vs player implementation using flag -1v1
- - [ ] plump sound effect when ball hits wall
- - [ ] score number too sharp/ grainy
+ - [x] plump sound effect when ball hits wall
+ - [x] score number too sharp/ grainy
+ - [ ] close function
